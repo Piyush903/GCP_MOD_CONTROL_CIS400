@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_2",
   "severity": "high",
-  "sql": "with project_sink_count as (   select     project,     count(*) no_of_sink   from     gcp_logging_sink   where     filter = ''     and destination != ''   group by     project ) select   'https://www.googleapis.com/logging/v2/projects/' || s.project resource,   case     when s.no_of_sink > 0 then 'ok'     else 'alarm'   end as status,   case     when s.no_of_sink > 0       then 'Sinks configured for all log entries.'     else 'Sinks not configured for all log entries.'   end as reason      , p.project_id as project from   gcp_project p   left join project_sink_count s on s.project = p.project_id;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "2.2 Ensure That Sinks Are Configured for All Log Entries",
   "path": null,
   "qualifiedName": null,

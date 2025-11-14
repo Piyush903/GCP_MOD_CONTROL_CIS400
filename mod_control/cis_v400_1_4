@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_4",
   "severity": "high",
-  "sql": "with service_account_key as (   select     distinct service_account_name   from     gcp_service_account_key   where     key_type = 'USER_MANAGED' ) select   'https://iam.googleapis.com/v1/projects/' || project || '/serviceAccounts/' || name as resource,   case     when name like '%iam.gserviceaccount.com' and name in (select service_account_name from service_account_key) then 'alarm'     else 'ok'   end as status,   case     when name like '%iam.gserviceaccount.com' and name in (select service_account_name from service_account_key)       then title || ' has user-managed keys.'     else title || ' does not have user-managed keys.'   end as reason   , project as project from   gcp_service_account;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "1.4 Ensure That There Are Only GCP-Managed Service Account Keys for Each Service Account",
   "path": null,
   "qualifiedName": null,

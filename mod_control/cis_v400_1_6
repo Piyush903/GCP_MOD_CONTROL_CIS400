@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_6",
   "severity": "high",
-  "sql": "with unapproved_bindings as (   select     project,     p,     entity   from     gcp_iam_policy,     jsonb_array_elements(bindings) as p,     jsonb_array_elements_text(p -> 'members') as entity   where     p ->> 'role' in ('roles/iam.serviceAccountTokenCreator','roles/iam.serviceAccountUser')     and entity not like '%iam.gserviceaccount.com' ) select   p.project as resource,   case     when entity is not null then 'alarm'     else 'ok'   end as status,   case     when entity is not null       then 'IAM users associated with iam.serviceAccountTokenCreator or iam.serviceAccountUser role.'     else 'No IAM users associated with iam.serviceAccountTokenCreator or iam.serviceAccountUser role.'   end as reason   , p.project as project from   gcp_iam_policy as p   left join unapproved_bindings as b on p.project = b.project;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "1.6 Ensure That IAM Users Are Not Assigned the Service Account User or Service Account Token Creator Roles at Project Level",
   "path": null,
   "qualifiedName": null,

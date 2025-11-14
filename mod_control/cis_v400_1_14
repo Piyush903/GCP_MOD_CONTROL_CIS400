@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_14",
   "severity": "high",
-  "sql": "select    'https://iam.googleapis.com/v1/projects/' || project || '/apikeys/' || name as resource,   case     when restrictions -> 'apiTargets' is null then 'alarm'     else 'ok'   end as status,   case     when restrictions -> 'apiTargets' is null then title || ' API key is not restricted to required APIs.'     else title || ' API key is restricted to only required APIs.'   end as reason   , location as location, project as project from   gcp_apikeys_key;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "1.14 Ensure API Keys Are Restricted to Only APIs That Application Needs Access",
   "path": null,
   "qualifiedName": null,

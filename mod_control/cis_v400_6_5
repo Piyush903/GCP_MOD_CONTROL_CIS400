@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_5",
   "severity": "high",
-  "sql": "select   self_link as resource,   case     when exists (       select 1       from jsonb_array_elements(ip_configuration -> 'authorizedNetworks') as authNet       where authNet ->> 'value' = '0.0.0.0/0' or authNet ->> 'value' = '::/0'     ) then 'alarm'     else 'ok'   end as status,   case     when exists (       select 1       from jsonb_array_elements(ip_configuration -> 'authorizedNetworks') as authNet       where authNet ->> 'value' = '0.0.0.0/0' or  authNet ->> 'value' = '::/0'     ) then title || ' is open to the internet.'     else title || ' is not open to the internet.'   end as reason      , location as location, project as project from   gcp_sql_database_instance;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "6.5 Ensure That Cloud SQL Database Instances Do Not Implicitly Whitelist All Public IP Addresses",
   "path": null,
   "qualifiedName": null,

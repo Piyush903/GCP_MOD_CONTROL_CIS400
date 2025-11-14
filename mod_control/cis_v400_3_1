@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_1",
   "severity": "high",
-  "sql": "select   self_link resource,   case     when name = 'default' then 'alarm'     else 'ok'   end as status,   case     when name = 'default'       then title || ' is a default network.'     else title || ' not a default network.'   end as reason   , project as project from   gcp_compute_network;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "3.1 Ensure That the Default Network Does Not Exist in a Project",
   "path": null,
   "qualifiedName": null,

@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_2",
   "severity": "high",
-  "sql": "select   self_link resource,   case     when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'     when account ->> 'email' like '%-compute@developer.gserviceaccount.com' and account -> 'scopes' ? 'https://www.googleapis.com/auth/cloud-platform' then 'alarm'     else 'ok'   end as status,   case     when name like 'gke-%' and labels ? 'goog-gke-node'       then title || ' created by GKE.'     when account ->> 'email' like '%-compute@developer.gserviceaccount.com' and account -> 'scopes' ? 'https://www.googleapis.com/auth/cloud-platform'       then title || ' configured with default service account with full access.'     else title || ' not configured with default service account with full access.'   end as reason      , location as location, project as project from   gcp_compute_instance,   jsonb_array_elements(service_accounts) account;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "4.2 Ensure That Instances Are Not Configured To Use the Default Service Account With Full Access to All Cloud APIs",
   "path": null,
   "qualifiedName": null,

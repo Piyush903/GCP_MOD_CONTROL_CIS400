@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_6",
   "severity": "high",
-  "sql": "with filter_data as (   select     m.project as project,     display_name alert_name,     count(m.name) metric_name   from     gcp_monitoring_alert_policy,     jsonb_array_elements(conditions) as filter_condition     join gcp_logging_metric m on m.filter ~ '\\\\s*resource\\\\.type\\\\s*=\\\\s*\\",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "2.6 Ensure That the Log Metric Filter and Alerts Exist for Custom Role Changes",
   "path": null,
   "qualifiedName": null,

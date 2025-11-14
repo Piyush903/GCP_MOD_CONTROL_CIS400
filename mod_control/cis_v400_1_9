@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_9",
   "severity": "high",
-  "sql": "with public_keys as (   select     distinct self_link   from     gcp_kms_key,     jsonb_array_elements(iam_policy -> 'bindings') as b   where     b -> 'members' ?| array['allAuthenticatedUsers', 'allUsers'] ) select   k.self_link as resource,   case     when p.self_link is null then 'ok'     else 'alarm'   end as status,   case     when p.self_link is null then title || ' in ' || k.key_ring_name || ' key ring not publicly accessible.'     else title || ' in ' || k.key_ring_name || ' key ring publicly accessible.'   end as reason      , location as location, project as project from   gcp_kms_key k left join public_keys p on k.self_link = p.self_link;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "1.9 Ensure That Cloud KMS Cryptokeys Are Not Anonymously or Publicly Accessible",
   "path": null,
   "qualifiedName": null,

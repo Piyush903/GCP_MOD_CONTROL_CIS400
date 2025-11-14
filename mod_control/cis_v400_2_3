@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_3",
   "severity": "high",
-  "sql": "with logging_sinks as (   select     self_link,     title,     _ctx,     project,     destination   from     gcp_logging_sink ) select   s.self_link resource,   case     when b.retention_policy is not null and b.retention_policy ->> 'isLocked' = 'true' then 'ok'     else 'alarm'   end as status,   case     when b.retention_policy is not null and b.retention_policy ->> 'isLocked' = 'true'       then s.title || '''s logging bucket ' || b.name || ' has retention policies configured.'     else s.title || '''s logging bucket ' || b.name || ' has retention policies not configured.'   end as reason   , s.project as project from   gcp_storage_bucket b   join logging_sinks s on (   split_part(s.destination, '/', 1) = 'storage.googleapis.com'   and split_part(s.destination, '/', 2) = b.name );",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "2.3 Ensure That Retention Policies on Cloud Storage Buckets Used for Exporting Logs Are Configured Using Bucket Lock",
   "path": null,
   "qualifiedName": null,

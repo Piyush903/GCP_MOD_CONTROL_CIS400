@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_8_1",
   "severity": "high",
-  "sql": "select   cluster_name resource,   case     when config -> 'encryptionConfig' ->> 'gcePdKmsKeyName' is null then 'alarm'     else 'ok'   end as status,   case     when config -> 'encryptionConfig' ->> 'gcePdKmsKeyName' is null       then title || ' is not encrypted using customer-managed encryption keys (CMEK).'     else title || ' is encrypted using customer-managed encryption keys (CMEK).'   end as reason      , location as location, project as project from   gcp_dataproc_cluster;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "8.1 Ensure that Dataproc Cluster is encrypted using Customer-Managed Encryption Key",
   "path": null,
   "qualifiedName": null,

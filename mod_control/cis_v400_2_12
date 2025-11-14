@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_12",
   "severity": "high",
-  "sql": "with associated_networks as (   select     split_part(network ->> 'networkUrl', 'networks/', 2) network_name,     enable_logging   from     gcp_dns_policy,     jsonb_array_elements(networks) network ) select   net.self_link resource,   case     when p.network_name is null then 'alarm'     when not p.enable_logging then 'alarm'     else 'ok'   end as status,   case     when p.network_name is null then net.title || ' not associated with DNS policy.'     when not p.enable_logging then net.title || ' associated with DNS policy with logging disabled.'     else net.title || ' associated with DNS policy with logging enabled.'   end as reason   , project as project from   gcp_compute_network net left join associated_networks p on net.name = p.network_name;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "2.12 Ensure That Cloud DNS Logging Is Enabled for All VPC Networks",
   "path": null,
   "qualifiedName": null,

@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_13",
   "severity": "high",
-  "sql": "select   'https://iam.googleapis.com/v1/projects/' || project || '/apikeys/' || name as resource,   case     when restrictions -> 'serverKeyRestrictions' is null       and restrictions -> 'browserKeyRestrictions' is null       and restrictions -> 'androidKeyRestrictions' is null       and restrictions -> 'iosKeyRestrictions' is null then 'alarm'     when restrictions -> 'serverKeyRestrictions' @> any( array[     '{\\",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "1.13 Ensure API Keys Are Restricted To Use by Only Specified Hosts and Apps",
   "path": null,
   "qualifiedName": null,

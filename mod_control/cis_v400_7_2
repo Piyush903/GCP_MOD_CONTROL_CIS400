@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_7_2",
   "severity": "high",
-  "sql": "select   self_link resource,   case     when kms_key_name is null then 'alarm'     else 'ok'   end as status,   case     when kms_key_name is null       then title || ' encrypted with Google managed cryptographic keys.'     else title || ' encrypted with customer-managed encryption keys.'   end as reason      , location as location, project as project from   gcp_bigquery_table;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "7.2 Ensure That All BigQuery Tables Are Encrypted With Customer-Managed Encryption Key (CMEK)",
   "path": null,
   "qualifiedName": null,

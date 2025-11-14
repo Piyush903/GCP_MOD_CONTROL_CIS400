@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_1",
   "severity": "high",
-  "sql": "with default_audit_configs as (   select     *   from     (       select         service,         string_agg(log ->> 'logType', ', ') log_types,         string_agg(log ->> 'exemptedMembers', ', ') exempted_user,         _ctx,         project       from         gcp_audit_policy,         jsonb_array_elements(audit_log_configs) as log       group by         service, project, _ctx     ) logs   where     log_types like '%DATA_WRITE%'     and log_types like '%DATA_READ%'     and log_types like '%ADMIN_READ%'     and service = 'allServices' ) select   default_audit_configs.service resource,   case     when default_audit_configs.exempted_user is null then 'ok'     else 'alarm'   end as status,   case     when default_audit_configs.exempted_user is null       then 'Audit logging properly configured across all services and no exempted users associated.'     else 'Audit logging not configured as per CIS requirement or default audit setting having exempted user.'   end as reason   , default_audit_configs.project as project from   default_audit_configs;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "2.1 Ensure That Cloud Audit Logging Is Configured Properly",
   "path": null,
   "qualifiedName": null,

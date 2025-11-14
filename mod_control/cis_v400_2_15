@@ -4,7 +4,7 @@
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_15",
   "severity": "high",
-  "sql": "select   self_link as resource,   case     when access_approval_settings is not null and access_approval_settings -> 'notificationEmails' is not null then 'ok'     else 'alarm'   end as status,   case     when access_approval_settings is not null and access_approval_settings -> 'notificationEmails' is not null       then name || ' access approval is enabled.'     else name || ' access approval is disabled.'   end as reason   , project_id as project from   gcp_project;",
+  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
   "title": "2.15 Ensure 'Access Approval' is 'Enabled'",
   "path": null,
   "qualifiedName": null,
