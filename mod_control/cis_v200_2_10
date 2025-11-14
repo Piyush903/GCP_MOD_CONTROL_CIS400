@@ -1,0 +1,25 @@
+{
+  "index": "797cfbcc-6b10-4ebf-ba1a-0b705ba3fbca",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_2_10",
+  "severity": "low",
+  "sql": "WITH filter_data AS (\n  SELECT \n    m.project AS project, \n    display_name AS alert_name, \n    COUNT(m.name) AS metric_name \n  FROM \n    gcp.gcp_monitoring_alert_policy as a,\n    jsonb_array_elements(conditions) AS filter_condition \n  JOIN \n    gcp.gcp_logging_metric m \n  ON \n    m.filter LIKE '%resource.type=\"gcs_bucket\"%'\n    AND m.filter LIKE '%protoPayload.methodName:\"storage.setIamPermissions\"%'\n  AND \n    filter_condition -> 'conditionThreshold' ->> 'filter' LIKE '%metric.type = \"' || m.metric_descriptor_type || '\"%'\n  WHERE \n    enabled\n\tand m.project_id=projectId\n\tand m.cd_snapshot_version=snapshotVersion\n\tand a.project_id=projectId\n\tand a.cd_snapshot_version=snapshotVersion\n  GROUP BY \n    m.project, display_name, m.name\n) \nSELECT \n  'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id AS resource, \n  CASE \n    WHEN d.metric_name > 0 THEN 'ok' \n    ELSE 'alarm' \n  END AS status, \n  CASE \n    WHEN d.metric_name > 0 THEN 'Log metric and alert exist for Storage IAM permission changes.' \n    ELSE 'Log metric and alert do not exist for Storage IAM permission changes.' \n  END AS reason, \n  project_id AS project \nFROM \n  gcp.gcp_project AS p \nLEFT JOIN \n  filter_data AS d ON d.project = project\n\twhere p.project_id=projectId\n\tand p.cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that the log metric filter and alerts exist for Cloud Storage IAM permission changes",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.logging_metric_alert_storage_iam_permission_changes",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    839324000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}

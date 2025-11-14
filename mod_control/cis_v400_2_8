@@ -1,0 +1,26 @@
+{
+  "index": "dd91fa4e-3044-4c52-b6e1-e527116acfbb",
+  "description": "It is recommended that a metric filter and alarm be established for Virtual Private Cloud (VPC) network route changes.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_2_8",
+  "severity": "high",
+  "sql": "with filter_data as (   select     m.project as project,     display_name alert_name,     count(m.name) metric_name   from     gcp_monitoring_alert_policy,     jsonb_array_elements(conditions) as filter_condition     join gcp_logging_metric m on m.filter ~ '\\\\s*resource\\\\.type\\\\s*=\\\\s*\\",
+  "title": "2.8 Ensure That the Log Metric Filter and Alerts Exist for VPC Network Route Changes",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    306028000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

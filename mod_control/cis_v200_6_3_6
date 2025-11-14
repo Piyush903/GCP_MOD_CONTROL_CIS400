@@ -1,0 +1,25 @@
+{
+  "index": "7d92dedd-f318-4b8a-8aac-b3dfb4636da9",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_6_3_6",
+  "severity": "medium",
+  "sql": "select\n  self_link as resource,\n  case\n    when database_version not like 'SQLSERVER%' then 'skip'\n    when database_flags @> '[{\"name\":\"3625\",\"value\":\"on\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'SQLSERVER%' then title || ' not a SQL Server database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"3625\"}]') then title || ' ''3625 (trace flag)'' not set.'\n    when database_flags @> '[{\"name\":\"3625\",\"value\":\"on\"}]' then title || ' ''3625 (trace flag)'' database flag set to ''on''.'\n    else title || ' ''3625 (trace flag)'' database flag set to ''off''.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure '3625 (trace flag)' database flag for Cloud SQL SQL Server instance is set to 'off'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_sql_3625_trace_database_flag_on",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    861495000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

@@ -1,0 +1,12 @@
+{
+  "index": "c2cac114-b492-4985-bc4a-172b23141859",
+  "children": "{gcp_compliance.benchmark.cis_v400_1,gcp_compliance.benchmark.cis_v400_2,gcp_compliance.benchmark.cis_v400_3,gcp_compliance.benchmark.cis_v400_4,gcp_compliance.benchmark.cis_v400_5,gcp_compliance.benchmark.cis_v400_6,gcp_compliance.benchmark.cis_v400_7,gcp_compliance.benchmark.cis_v400_8}",
+  "description": "The CIS Google Cloud Platform Foundations Security Benchmark covers foundational elements of Google Cloud Platform.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400",
+  "title": "GCP CIS v4.0.0",
+  "modifiedChildren": "{cis_v400_1,cis_v400_2,cis_v400_3,cis_v400_4,cis_v400_5,cis_v400_6,cis_v400_7,cis_v400_8}",
+  "parent": "",
+  "isActive": true,
+  "accountId": null
+}

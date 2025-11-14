@@ -1,0 +1,26 @@
+{
+  "index": "9b3e1ed1-387b-4e2d-b564-69d5ba55e04e",
+  "description": "It is recommended that the principle of 'Separation of Duties' is enforced while assigning KMS related roles to users.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_11",
+  "severity": "high",
+  "sql": "with users_with_roles as (   select     distinct split_part(member_entity, ':', 2) as user_name,     project,     _ctx,     array_agg(distinct p ->> 'role') as assigned_roles   from     gcp_iam_policy,     jsonb_array_elements(bindings) as p,     jsonb_array_elements_text(p -> 'members') as member_entity   where     split_part(member_entity, ':', 1) = 'user'   group by     user_name,     project,     _ctx ), kms_roles_users as (   select     user_name,     project,     assigned_roles   from     users_with_roles   where     'roles/cloudkms.admin' = any(assigned_roles)     and assigned_roles && array['roles/cloudkms.cryptoKeyEncrypterDecrypter', 'roles/cloudkms.cryptoKeyEncrypter', 'roles/cloudkms.cryptoKeyDecrypter'] ) select   distinct r.user_name as resource,   case     when 'roles/cloudkms.admin' = any(r.assigned_roles) and k.user_name is null then 'ok'     when k.user_name is not null then 'alarm'     else 'ok'   end as status,   case     when 'roles/cloudkms.admin' = any(r.assigned_roles) and k.user_name is null then r.user_name || ' assigned only with KMS admin role.'     when k.user_name is not null then r.user_name || ' assigned with roles/cloudkms.admin, ' ||       concat_ws(', ',         case when 'roles/cloudkms.cryptoKeyEncrypterDecrypter' = any(r.assigned_roles) then 'roles/cloudkms.cryptoKeyEncrypterDecrypter' end,         case when 'roles/cloudkms.cryptoKeyEncrypter' = any(r.assigned_roles) then 'roles/cloudkms.cryptoKeyEncrypter' end,         case when 'roles/cloudkms.cryptoKeyDecrypter' = any(r.assigned_roles) then 'roles/cloudkms.cryptoKeyDecrypter' end         ) || ' KMS role(s).'     else r.user_name || ' not assigned with KMS admin and additional encrypter/decrypter roles.'   end as reason   , r.project as project from   users_with_roles as r   left join kms_roles_users as k on k.user_name = r.user_name and k.project = r.project",
+  "title": "1.11 Ensure That Separation of Duties Is Enforced While Assigning KMS Related Roles to Users",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295818000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

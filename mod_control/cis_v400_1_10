@@ -1,0 +1,26 @@
+{
+  "index": "16e854b2-f00f-4a21-9eb6-647cb7a528b9",
+  "description": "Google Cloud Key Management Service stores cryptographic keys in a hierarchical structure designed for useful and elegant access control management. The format for the rotation schedule depends on the client library that is used. For the gcloud command-line tool, the next rotation time must be in ISO or RFC3339 format, and the rotation period must be in the form INTEGER[UNIT], where units can be one of seconds (s), minutes (m), hours (h) or days (d).",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_10",
+  "severity": "high",
+  "sql": "select   self_link as resource,   case     when \\",
+  "title": "1.10 Ensure KMS Encryption Keys Are Rotated Within a Period of 90 Days",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295799000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

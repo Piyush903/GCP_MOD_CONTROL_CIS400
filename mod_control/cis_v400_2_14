@@ -1,0 +1,26 @@
+{
+  "index": "e227d8a6-5d9d-462a-bdb1-4cbda7480e0b",
+  "description": "GCP Access Transparency provides audit logs for all actions that Google personnel take in your Google Cloud resources.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_2_14",
+  "severity": "high",
+  "sql": "select   'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,   'info' status,   'Manual verification required.' reason   , project_id as project from   gcp_project;",
+  "title": "2.14 Ensure 'Access Transparency' is 'Enabled'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    306141000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

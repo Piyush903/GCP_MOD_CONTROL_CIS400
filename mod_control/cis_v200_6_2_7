@@ -1,0 +1,25 @@
+{
+  "index": "4237d830-9ef8-4319-baec-611cd22f164f",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_6_2_7",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'POSTGRES%' then 'skip'\n    when database_flags @> '[{\"name\":\"log_min_duration_statement\",\"value\":\"-1\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'POSTGRES%'\n      then title || ' not a PostgreSQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"log_min_duration_statement\"}]')\n      then title || ' ''log_min_duration_statement'' database flag not set.'\n    when database_flags @> '[{\"name\":\"log_min_duration_statement\",\"value\":\"-1\"}]'\n      then title || ' ''log_min_duration_statement'' database flag disabled.'\n    else title || ' ''log_min_duration_statement'' database flag enabled.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure that the 'log_min_duration_statement' database flag for Cloud SQL PostgreSQL instance is set to '-1' (disabled)",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_postgresql_log_min_duration_statement_database_flag_disabled",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    779817000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

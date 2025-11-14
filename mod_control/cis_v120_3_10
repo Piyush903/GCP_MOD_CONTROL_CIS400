@@ -1,0 +1,25 @@
+{
+  "index": "f6c793b8-9ca0-4636-8f3d-ed5bd204bab2",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_3_10",
+  "severity": "high",
+  "sql": "select\n  self_link resource,\n  case\n    when allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\"]}]' and source_ranges ?& array['130.211.0.0/22', '35.191.0.0/16'] then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\"]}]' and source_ranges ?& array['130.211.0.0/22', '35.191.0.0/16']\n      then title || ' only allows traffic proxied by IAP.'\n    else title || ' not configured to only allow connections proxied by IAP.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_compute_firewall\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure Firewall Rules for instances behind Identity Aware Proxy (IAP) only allow the traffic from Google Cloud Loadbalancer (GCLB) Health Check and Proxy Addresses",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_firewall_allow_connections_proxied_by_iap",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    925621000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Firewall"
+}

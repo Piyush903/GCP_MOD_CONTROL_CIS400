@@ -1,0 +1,25 @@
+{
+  "index": "1ee88021-4f0b-4c07-95d5-6ba8491d8fc2",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_6_3_5",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'SQLSERVER%' then 'skip'\n    when database_flags @> '[{\"name\":\"remote access\",\"value\":\"off\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'SQLSERVER%'\n      then title || ' not a SQL Server database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"remote access\"}]')\n      then title || ' ''remote access'' not set.'\n    when database_flags @> '[{\"name\":\"remote access\",\"value\":\"off\"}]'\n      then title || ' ''remote access'' database flag set to ''off''.'\n    else title || ' ''remote access'' database flag set to ''on''.'\n  end as reason,\n  location as location,\n  project as project\nfrom\n  gcp.gcp_sql_database_instance\nwhere project_id = projectId\n  and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure 'remote access' database flag for Cloud SQL SQL Server instance is set to 'off'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_sql_remote_access_database_flag_off",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    769363000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

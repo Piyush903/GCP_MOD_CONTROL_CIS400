@@ -1,0 +1,26 @@
+{
+  "index": "5546441e-70f9-4b6a-92dc-ba8104ec3cf7",
+  "description": "It is recommended that a metric filter and alarm be established for Cloud Storage Bucket IAM changes.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_2_10",
+  "severity": "high",
+  "sql": "with filter_data as (   select     m.project as project,     display_name alert_name,     count(m.name) metric_name   from     gcp_monitoring_alert_policy,     jsonb_array_elements(conditions) as filter_condition     join gcp_logging_metric m on m.filter ~ '\\\\s*resource\\\\.type\\\\s*=\\\\s*\\",
+  "title": "2.10 Ensure That the Log Metric Filter and Alerts Exist for Cloud Storage IAM Permission Changes",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    306065000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

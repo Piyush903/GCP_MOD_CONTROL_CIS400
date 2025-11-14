@@ -1,0 +1,26 @@
+{
+  "index": "9ce483f5-1d93-4955-9041-51bd3c886cc3",
+  "description": "Use corporate login credentials instead of consumer accounts, such as Gmail accounts.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_1",
+  "severity": "high",
+  "sql": "-- Please note: The table gcp_organization requires the resourcemanager.organizations.get permission to retrieve organization details. with user_with_access as (   select     distinct split_part(m, ':', 2) as member,     project,     _ctx,     location   from     gcp_iam_policy,     jsonb_array_elements(bindings) as b,     jsonb_array_elements_text(b -> 'members') as m   where     m like 'user:%' ) select   case when (select count(*) from gcp_organization) = 0 then a.project else a.member end as resource,   case     when (select count(*) from gcp_organization) = 0 then 'info'     when org.display_name is null then 'alarm'     else 'ok'   end as status,   case     when (select count(*) from gcp_organization) = 0 then 'Plugin authentication mechanism does not have organization viewer permission.'     when org.display_name is null then a.member || ' uses non-corporate login credentials.'     else a.member || ' uses corporate login credentials.'   end as reason   , a.project as project from   user_with_access as a   left join gcp_organization as org on split_part(a.member, '@', 2) = org.display_name   limit case when (select count(*) from gcp_organization) = 0 then 1 end;\n",
+  "title": "1.1 Ensure that Corporate Login Credentials are Used",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295689000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

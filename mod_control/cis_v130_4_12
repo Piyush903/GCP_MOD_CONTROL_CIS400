@@ -1,0 +1,25 @@
+{
+  "index": "1507cf44-5114-4b0e-b3f5-a8a53576b35f",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_4_12",
+  "severity": "high",
+  "sql": "select\n  'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n  'info' status,\n  'Manual verification required.' reason\n  , project_id as project\nfrom\n  gcp.gcp_project\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;\n",
+  "title": " Ensure the Latest Operating System Updates Are Installed On Your Virtual Machines in All Projects",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "cis_v400_4_12",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    582330000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}

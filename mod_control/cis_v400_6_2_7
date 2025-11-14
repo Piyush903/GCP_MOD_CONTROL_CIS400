@@ -1,0 +1,26 @@
+{
+  "index": "76972fc4-4054-4ada-b406-9cc611f8bb09",
+  "description": "The `log_min_duration_statement` flag defines the minimum amount of execution time of a statement in milliseconds where the total duration of the statement is logged. Ensure that log_min_duration_statement is disabled, i.e., a value of -1 is set.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_2_7",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when database_version not like 'POSTGRES%' then 'skip'     when database_flags @> '[{\\",
+  "title": "6.2.7 Ensure That the 'Log_min_duration_statement' Database Flag for Cloud SQL PostgreSQL Instance Is Set to '-1' (Disabled)",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    297996000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

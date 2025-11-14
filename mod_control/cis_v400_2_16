@@ -1,0 +1,26 @@
+{
+  "index": "7beb0b34-e5c9-4621-93f1-45ca61a4e4a7",
+  "description": "Logging enabled on a HTTPS Load Balancer will show all network traffic and its destination.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_2_16",
+  "severity": "high",
+  "sql": "select   m.self_link as resource,   case     when s.self_link is null then 'skip'     when s.log_config_enable then 'ok'     else 'alarm'   end as status,   case     when s.self_link is null then m.name || ' uses backend bucket.'     when s.log_config_enable then m.name || ' logging enabled.'     else m.name || ' logging disabled.'   end as reason   , m.location as location, m.project as project from   gcp_compute_url_map as m   left join gcp_compute_backend_service as s on s.self_link = m.default_service;",
+  "title": "2.16 Ensure Logging is enabled for HTTP(S) Load Balancer",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    306185000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

@@ -1,0 +1,26 @@
+{
+  "index": "b96141a7-76f3-45dd-82bf-e79f688fdc1f",
+  "description": "GCP Access Approval enables you to require your organizations' explicit approval whenever Google support try to access your projects. You can then select users within your organization who can approve these requests through giving them a security role in IAM. All access requests display which Google Employee requested them in an email or Pub/Sub message that you can choose to Approve. This adds an additional control and logging of who in your organization approved/denied these requests.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_2_15",
+  "severity": "high",
+  "sql": "select   self_link as resource,   case     when access_approval_settings is not null and access_approval_settings -> 'notificationEmails' is not null then 'ok'     else 'alarm'   end as status,   case     when access_approval_settings is not null and access_approval_settings -> 'notificationEmails' is not null       then name || ' access approval is enabled.'     else name || ' access approval is disabled.'   end as reason   , project_id as project from   gcp_project;",
+  "title": "2.15 Ensure 'Access Approval' is 'Enabled'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    306165000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

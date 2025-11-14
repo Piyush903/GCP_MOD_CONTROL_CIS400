@@ -1,0 +1,26 @@
+{
+  "index": "8ff5c6f4-4ad7-47a9-8ef6-56784014588b",
+  "description": "To support principle of least privileges and prevent potential privilege escalation it is recommended that instances are not assigned to default service account `Compute Engine default service account` with Scope `Allow full access to all Cloud APIs`.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_4_2",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'     when account ->> 'email' like '%-compute@developer.gserviceaccount.com' and account -> 'scopes' ? 'https://www.googleapis.com/auth/cloud-platform' then 'alarm'     else 'ok'   end as status,   case     when name like 'gke-%' and labels ? 'goog-gke-node'       then title || ' created by GKE.'     when account ->> 'email' like '%-compute@developer.gserviceaccount.com' and account -> 'scopes' ? 'https://www.googleapis.com/auth/cloud-platform'       then title || ' configured with default service account with full access.'     else title || ' not configured with default service account with full access.'   end as reason      , location as location, project as project from   gcp_compute_instance,   jsonb_array_elements(service_accounts) account;",
+  "title": "4.2 Ensure That Instances Are Not Configured To Use the Default Service Account With Full Access to All Cloud APIs",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    301901000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

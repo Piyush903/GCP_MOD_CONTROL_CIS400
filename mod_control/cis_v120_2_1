@@ -1,0 +1,25 @@
+{
+  "index": "11c3893d-a5e3-4206-b777-1095c77d4dde",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_2_1",
+  "severity": "low",
+  "sql": "with default_audit_configs as (\n  select\n    *\n  from\n    (\n      select\n        service,\n        string_agg(log ->> 'logType', ', ') as log_types,\n        string_agg(log ->> 'exemptedMembers', ', ') as exempted_user,\n        location,\n        project\n      from\n        gcp.gcp_audit_policy,\n        jsonb_array_elements(audit_log_configs) as log\n      where\n        project_id=projectId and cd_snapshot_version=snapshotVersion\n      group by\n        service, project, location\n    ) logs\n  where\n    log_types like '%DATA_WRITE%'\n    and log_types like '%DATA_READ%'\n    and log_types like '%ADMIN_READ%'\n    and service = 'allServices'\n)\nselect\n  default_audit_configs.service as resource,\n  case\n    when default_audit_configs.exempted_user is null then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when default_audit_configs.exempted_user is null\n      then 'Audit logging properly configured across all services and no exempted users associated.'\n    else 'Audit logging not configured as per CIS requirement or default audit setting having exempted user.'\n  end as reason,\n  default_audit_configs.location as location,\n  default_audit_configs.project as project\nfrom\n  default_audit_configs;\n",
+  "title": "Ensure that Cloud Audit Logging is configured properly across all services and all users from a project",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.audit_logging_configured_for_all_service",
+  "controlLevel": "cis_v400_2_1",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    403744000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Audit Policy"
+}

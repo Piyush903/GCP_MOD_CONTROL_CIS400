@@ -1,0 +1,26 @@
+{
+  "index": "943ed232-9a65-49c6-84fb-7792616e54f6",
+  "description": "Database Server should accept connections only from trusted Network(s)/IP(s) and restrict access from public IP addresses.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_5",
+  "severity": "high",
+  "sql": "select   self_link as resource,   case     when exists (       select 1       from jsonb_array_elements(ip_configuration -> 'authorizedNetworks') as authNet       where authNet ->> 'value' = '0.0.0.0/0' or authNet ->> 'value' = '::/0'     ) then 'alarm'     else 'ok'   end as status,   case     when exists (       select 1       from jsonb_array_elements(ip_configuration -> 'authorizedNetworks') as authNet       where authNet ->> 'value' = '0.0.0.0/0' or  authNet ->> 'value' = '::/0'     ) then title || ' is open to the internet.'     else title || ' is not open to the internet.'   end as reason      , location as location, project as project from   gcp_sql_database_instance;",
+  "title": "6.5 Ensure That Cloud SQL Database Instances Do Not Implicitly Whitelist All Public IP Addresses",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    298087000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

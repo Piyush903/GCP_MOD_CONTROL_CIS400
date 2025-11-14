@@ -1,0 +1,25 @@
+{
+  "index": "15ff6c43-c88a-47cb-a590-ce25073c80b3",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_3_7",
+  "severity": "high",
+  "sql": "WITH ip_protocol_all AS (\n    SELECT\n        name\n    FROM\n        gcp.gcp_compute_firewall\n    WHERE\n        direction = 'INGRESS'\n        AND project_id=projectId\n        AND cd_snapshot_version=snapshotVersion\n        AND action = 'Allow'\n        AND source_ranges ?& array['0.0.0.0/0']\n        AND (allowed @> '[{\"IPProtocol\":\"all\"}]' OR allowed::text LIKE '%{\"IPProtocol\":\"tcp\"}%' OR allowed::text LIKE '%{\"IPProtocol\":\"udp\"}%')\n),\nip_protocol_rdp AS (\n    SELECT\n        name\n    FROM\n        gcp.gcp_compute_firewall,\n        jsonb_array_elements(allowed) AS p,\n        jsonb_array_elements_text(p -> 'ports') AS port\n    WHERE\n        direction = 'INGRESS'\n        AND project_id=projectId\n        AND cd_snapshot_version=snapshotVersion\n        AND action = 'Allow'\n        AND source_ranges ?& array['0.0.0.0/0']\n        AND p ->> 'IPProtocol' = 'tcp'\n        AND (\n            port = '3389'\n            OR (\n                port LIKE '%-%'\n                AND split_part(port, '-', 1)::integer <= 3389\n                AND split_part(port, '-', 2)::integer >= 3389\n            )\n        )\n)\nSELECT\n    self_link AS resource,\n    CASE\n        WHEN name IN (SELECT name FROM ip_protocol_rdp) THEN 'alarm'\n        WHEN name IN (SELECT name FROM ip_protocol_all) THEN 'alarm'\n        ELSE 'ok'\n    END AS status,\n    CASE\n        WHEN name IN (SELECT name FROM ip_protocol_rdp)\n            THEN 'Firewall rule allows connections from all IP addresses on TCP or UDP port 3389.'\n        WHEN name IN (SELECT name FROM ip_protocol_all)\n            THEN 'Firewall rule allows connections from all IP addresses on TCP or UDP port 3389 within the range 0-65535.'\n        ELSE 'Firewall rule does not allow connections from all IP addresses on TCP or UDP port 3389.'\n    END AS reason,\n    location AS location,\n    project AS project\nFROM\n    gcp.gcp_compute_firewall\nWHERE\n    project_id=projectId\n    AND cd_snapshot_version=snapshotVersion;",
+  "title": " Ensure that RDP access is restricted from the Internet",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_firewall_rule_rdp_access_restricted",
+  "controlLevel": "cis_v400_3_7",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    634094000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Firewall"
+}

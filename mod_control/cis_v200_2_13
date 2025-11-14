@@ -1,0 +1,25 @@
+{
+  "index": "0ae025c9-1724-4582-a647-d92404c716c4",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_2_13",
+  "severity": "low",
+  "sql": "select\n  name as resource,\n  case\n    when state = 'ENABLED' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when state = 'ENABLED'\n      then name || ' Cloud Asset API is enabled.'\n    else name || ' Cloud Asset API is disabled.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_project_service\nwhere\n  name = 'cloudasset.googleapis.com'\n\tand project_id=projectId\n\tand cd_snapshot_version=snapshotVersion;",
+  "title": " Ensure Cloud Asset Inventory Is Enabled",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.project_service_cloudasset_api_enabled",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    584309000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project Service"
+}

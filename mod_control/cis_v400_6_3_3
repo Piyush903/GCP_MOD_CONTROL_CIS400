@@ -1,0 +1,26 @@
+{
+  "index": "8f4e1d5f-eb84-4f5d-b78a-e6dd0b582b0a",
+  "description": "It is recommended to check the `user connections` for a Cloud SQL SQL Server instance to ensure that it is not artificially limiting connections.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_3_3",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when database_version not like 'SQLSERVER%' then 'skip'     when database_flags @> '[{\\",
+  "title": "6.3.3 Ensure 'user Connections' Database Flag for Cloud SQL SQL Server Instance Is Set to a Non-limiting Value",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    298027000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

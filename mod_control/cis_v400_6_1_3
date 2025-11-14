@@ -1,0 +1,26 @@
+{
+  "index": "ff83896e-63e7-4eee-b49d-77ff6b291977",
+  "description": "It is recommended to set the `local_infile` database flag for a Cloud SQL MySQL instance to `off`.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_1_3",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when database_version not like 'MYSQL%' then 'skip'     when database_flags @> '[{\\",
+  "title": "6.1.3 Ensure That the 'Local_infile' Database Flag for a Cloud SQL MySQL Instance Is Set to 'Off'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    297941000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

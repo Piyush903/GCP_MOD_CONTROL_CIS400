@@ -1,0 +1,25 @@
+{
+  "index": "2c404761-db0a-435d-a372-77a65020d535",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_4_6",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'\n    when can_ip_forward then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node'\n      then title || ' created by GKE.'\n    when can_ip_forward\n      then title || ' IP forwarding enabled.'\n    else title || ' IP forwarding not enabled.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that IP forwarding is not enabled on Instances",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_instance_ip_forwarding_disabled",
+  "controlLevel": "cis_v400_4_6",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    897149000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Engine"
+}

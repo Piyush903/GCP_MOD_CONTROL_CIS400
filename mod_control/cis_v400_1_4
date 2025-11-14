@@ -1,0 +1,26 @@
+{
+  "index": "77d2acab-3261-49f6-9509-303324c513ca",
+  "description": "User-managed service accounts should not have user-managed keys.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_4",
+  "severity": "high",
+  "sql": "with service_account_key as (   select     distinct service_account_name   from     gcp_service_account_key   where     key_type = 'USER_MANAGED' ) select   'https://iam.googleapis.com/v1/projects/' || project || '/serviceAccounts/' || name as resource,   case     when name like '%iam.gserviceaccount.com' and name in (select service_account_name from service_account_key) then 'alarm'     else 'ok'   end as status,   case     when name like '%iam.gserviceaccount.com' and name in (select service_account_name from service_account_key)       then title || ' has user-managed keys.'     else title || ' does not have user-managed keys.'   end as reason   , project as project from   gcp_service_account;",
+  "title": "1.4 Ensure That There Are Only GCP-Managed Service Account Keys for Each Service Account",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295725000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

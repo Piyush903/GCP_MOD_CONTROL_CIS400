@@ -1,0 +1,25 @@
+{
+  "index": "01861485-4d25-4e39-900f-ca4abfbe706f",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_1_8",
+  "severity": "medium",
+  "sql": "WITH users_with_roles AS (SELECT DISTINCT split_part(member_entity, ':', 2) as user_name, project, location, p ->> 'role' as assigned_role FROM gcp.gcp_iam_policy, jsonb_array_elements(bindings) as p, jsonb_array_elements_text(p -> 'members') as member_entity WHERE split_part(member_entity, ':', 1) = 'user' AND project_id = projectId AND cd_snapshot_version = snapshotVersion), owner_users AS (SELECT user_name, project, location FROM users_with_roles WHERE assigned_role = 'roles/owner'), account_admin_users AS (SELECT user_name, project, location FROM users_with_roles WHERE assigned_role = 'roles/iam.serviceAccountAdmin'), account_users AS (SELECT user_name, project, location FROM users_with_roles WHERE assigned_role = 'roles/iam.serviceAccountUser'), security_admin_users AS (SELECT user_name, project, location FROM users_with_roles WHERE assigned_role = 'roles/iam.securityAdmin'), editor_users AS (SELECT user_name, project, location FROM users_with_roles WHERE assigned_role = 'roles/editor') SELECT DISTINCT user_name as resource, CASE WHEN user_name IN (SELECT user_name FROM owner_users) AND user_name IN (SELECT user_name FROM account_admin_users) THEN 'alarm' WHEN user_name IN (SELECT user_name FROM account_admin_users) AND user_name IN (SELECT user_name FROM account_users) THEN 'alarm' WHEN user_name IN (SELECT user_name FROM security_admin_users) AND user_name IN (SELECT user_name FROM account_admin_users) THEN 'alarm' WHEN user_name IN (SELECT user_name FROM editor_users) AND user_name IN (SELECT user_name FROM security_admin_users) THEN 'alarm' ELSE 'ok' END as status, CASE WHEN user_name IN (SELECT user_name FROM owner_users) AND user_name IN (SELECT user_name FROM account_admin_users) THEN user_name || ' has both Owner and Service Account Admin roles - Critical SoD violation' WHEN user_name IN (SELECT user_name FROM account_admin_users) AND user_name IN (SELECT user_name FROM account_users) THEN user_name || ' has both Service Account Admin and User roles - SoD violation' WHEN user_name IN (SELECT user_name FROM security_admin_users) AND user_name IN (SELECT user_name FROM account_admin_users) THEN user_name || ' has both Security Admin and Service Account Admin roles - SoD violation' WHEN user_name IN (SELECT user_name FROM editor_users) AND user_name IN (SELECT user_name FROM security_admin_users) THEN user_name || ' has both Editor and Security Admin roles - SoD violation' ELSE user_name || ' has no SoD violations for critical role combinations' END as reason, location as location, project as project FROM users_with_roles;",
+  "title": "Ensure that Separation of duties is enforced while assigning service account related roles to users",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_user_separation_of_duty_enforced",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    797335000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "IAM Policy"
+}

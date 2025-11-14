@@ -1,0 +1,25 @@
+{
+  "index": "c3915909-353b-46bc-b362-d1af5958e572",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_3_10",
+  "severity": "high",
+  "sql": "select\n  self_link resource,\n  case\n    when\n      ( allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"443\",\"22\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"443\",\"22\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"443\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"22\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"3389\",\"443\",\"22\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"443\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"22\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"22\",\"443\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"3389\",\"443\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"22\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"443\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"22\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"3389\"]}]'\n      )\n      and (source_ranges ?& array['130.211.0.0/22']\n        or source_ranges ?& array['35.235.240.0/20']\n        or source_ranges ?& array['35.191.0.0/16']\n        or source_ranges ?& array['35.191.0.0/16', '130.211.0.0/22']\n        or source_ranges ?& array['35.191.0.0/16', '35.235.240.0/20']\n        or source_ranges ?& array['130.211.0.0/22', '35.235.240.0/20']\n        or source_ranges ?& array['130.211.0.0/22', '35.235.240.0/20', '35.191.0.0/16'])\n      then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when\n      ( allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"443\",\"22\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"443\",\"22\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"443\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"22\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"3389\",\"443\",\"22\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"443\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"22\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"22\",\"443\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"3389\",\"443\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"22\",\"3389\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"443\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"22\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"80\"]}]'\n        or allowed @> '[{\"IPProtocol\":\"tcp\",\"ports\":[\"3389\"]}]'\n      )\n      and (source_ranges ?& array['130.211.0.0/22']\n        or source_ranges ?& array['35.235.240.0/20']\n        or source_ranges ?& array['35.191.0.0/16']\n        or source_ranges ?& array['35.191.0.0/16', '130.211.0.0/22']\n        or source_ranges ?& array['35.191.0.0/16', '35.235.240.0/20']\n        or source_ranges ?& array['130.211.0.0/22', '35.235.240.0/20']\n        or source_ranges ?& array['130.211.0.0/22', '35.235.240.0/20', '35.191.0.0/16'])\n      then title || ' IAP configured to allow traffic from Google IP addresses.'\n    else title || ' IAP not configured to allow traffic from Google IP addresses.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_compute_firewall\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Use Identity Aware Proxy (IAP) to Ensure Only Traffic From Google IP Addresses are 'Allowed'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_firewall_allow_tcp_connections_proxied_by_iap",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    856943000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Firewall"
+}

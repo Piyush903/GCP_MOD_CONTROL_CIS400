@@ -1,0 +1,25 @@
+{
+  "index": "1818fa0c-954a-456c-82fd-fa0bb1f15afa",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_2_2",
+  "severity": "low",
+  "sql": "with project_sink_count as (\n  select\n    project,\n    count(*) no_of_sink\n  from\n    gcp.gcp_logging_sink\n  where\n    filter = ''\n    and destination != ''\n        and project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n  group by\n    project\n)\nselect\n  'https://www.googleapis.com/logging/v2/projects/' || s.project resource,\n  case\n    when s.no_of_sink > 0 then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when s.no_of_sink > 0\n      then 'Sinks configured for all log entries.'\n    else 'Sinks not configured for all log entries.'\n  end as reason\n  \n  , p.project_id as project\nfrom\n  gcp.gcp_project p\n  left join project_sink_count s on s.project = p.project_id\nwhere p.project_id=projectId\nand p.cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that sinks are configured for all log entries",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.logging_sink_configured_for_all_resource",
+  "controlLevel": "cis_v400_2_2",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    548369000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}

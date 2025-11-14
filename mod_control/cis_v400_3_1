@@ -1,0 +1,26 @@
+{
+  "index": "cbed9836-ad89-4efb-bc2c-4516de0c1b97",
+  "description": "To prevent use of `default` network, a project should not have a `default` network.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_3_1",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when name = 'default' then 'alarm'     else 'ok'   end as status,   case     when name = 'default'       then title || ' is a default network.'     else title || ' not a default network.'   end as reason   , project as project from   gcp_compute_network;",
+  "title": "3.1 Ensure That the Default Network Does Not Exist in a Project",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    304100000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

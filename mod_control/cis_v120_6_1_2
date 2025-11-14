@@ -1,0 +1,25 @@
+{
+  "index": "323d5985-cd3a-404a-b755-39713933fef8",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_6_1_2",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'MYSQL%' then 'skip'\n    when database_flags @> '[{\"name\":\"skip_show_database\",\"value\":\"on\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'MYSQL%'\n      then title || ' not a MySQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"skip_show_database\"}]')\n      then title || ' ''skip_show_database'' database flag not set.'\n    when database_flags @> '[{\"name\":\"skip_show_database\",\"value\":\"on\"}]'\n      then title || ' ''skip_show_database'' database flag set to ''on''.'\n    else title || ' ''skip_show_database'' database flag set to ''off''.'\n  end as reason\n    \n    , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure 'skip_show_database' database flag for Cloud SQL Mysql instance is set to 'on'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_mysql_skip_show_database_flag_on",
+  "controlLevel": "cis_v400_6_1_2",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    635094000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

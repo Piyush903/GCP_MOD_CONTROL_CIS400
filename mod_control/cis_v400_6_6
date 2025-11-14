@@ -1,0 +1,26 @@
+{
+  "index": "632ed3c5-0a42-4d96-a130-c866c6230eda",
+  "description": "It is recommended to configure Second Generation Sql instance to use private IPs instead of public IPs.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_6",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when ip_addresses @> '[{\\",
+  "title": "6.6 Ensure That Cloud SQL Database Instances Do Not Have Public IPs",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    298094000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

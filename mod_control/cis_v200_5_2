@@ -1,0 +1,25 @@
+{
+  "index": "5202f202-e678-47e8-93fa-047fb39a3897",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_5_2",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when iam_configuration_uniform_bucket_level_access_enabled then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when iam_configuration_uniform_bucket_level_access_enabled\n      then title || ' uniform bucket-level access enabled.'\n    else title || ' uniform bucket-level access not enabled.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_storage_bucket\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that Cloud Storage buckets have uniform bucket-level access enabled",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.storage_bucket_uniform_access_enabled",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    553141000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Storage Bucket"
+}

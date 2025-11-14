@@ -1,0 +1,12 @@
+{
+  "index": "2f2b3b14-f529-47ad-be9b-91700d809fc4",
+  "children": "{gcp_compliance.control.cis_v400_5_1,gcp_compliance.control.cis_v400_5_2}",
+  "description": "It is recommended that IAM policy on Cloud Storage bucket does not allows anonymous or public access.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_5",
+  "title": "5 Storage",
+  "modifiedChildren": "{cis_v400_5_1,cis_v400_5_2}",
+  "parent": "cis_v400",
+  "isActive": true,
+  "accountId": null
+}

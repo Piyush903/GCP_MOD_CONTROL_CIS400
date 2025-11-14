@@ -1,0 +1,26 @@
+{
+  "index": "06d40fb9-d3fc-4e44-b805-4fa82a343d7d",
+  "description": "It is recommended that the IAM policy on Cloud KMS `cryptokeys` should restrict anonymous and/or public access.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_9",
+  "severity": "high",
+  "sql": "with public_keys as (   select     distinct self_link   from     gcp_kms_key,     jsonb_array_elements(iam_policy -> 'bindings') as b   where     b -> 'members' ?| array['allAuthenticatedUsers', 'allUsers'] ) select   k.self_link as resource,   case     when p.self_link is null then 'ok'     else 'alarm'   end as status,   case     when p.self_link is null then title || ' in ' || k.key_ring_name || ' key ring not publicly accessible.'     else title || ' in ' || k.key_ring_name || ' key ring publicly accessible.'   end as reason      , location as location, project as project from   gcp_kms_key k left join public_keys p on k.self_link = p.self_link;",
+  "title": "1.9 Ensure That Cloud KMS Cryptokeys Are Not Anonymously or Publicly Accessible",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295791000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

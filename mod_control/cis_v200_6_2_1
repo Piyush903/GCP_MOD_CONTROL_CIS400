@@ -1,0 +1,25 @@
+{
+  "index": "07bfdd85-74c9-4d97-9222-b1f1ba933043",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_6_2_1",
+  "severity": "medium",
+  "sql": "select\n  self_link as resource,\n  case\n    when database_version not like 'POSTGRES%' then 'skip'\n    when database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"default\"}]' or database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"verbose\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'POSTGRES%' then title || ' not a PostgreSQL database.'\n    when database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"default\"}]' then title || ' log_error_verbosity database flag set to DEFAULT.'\n    when database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"verbose\"}]' then title || ' log_error_verbosity database flag set to VERBOSE.'\n    when database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"terse\"}]' then title || ' log_error_verbosity database flag set to TERSE.'\n    else title || ' log_error_verbosity database flag not set.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure 'log_error_verbosity' database flag for Cloud SQL PostgreSQL instance is set to 'DEFAULT' or stricter",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_postgresql_log_error_verbosity_database_flag_default_or_stricter",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    542371000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

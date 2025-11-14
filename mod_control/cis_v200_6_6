@@ -1,0 +1,25 @@
+{
+  "index": "66b0a098-a7e4-4cec-b150-f2516a8d830b",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_6_6",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when ip_addresses @> '[{\"type\": \"PRIMARY\"}]' and backend_type = 'SECOND_GEN' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when ip_addresses @> '[{\"type\": \"PRIMARY\"}]' and backend_type = 'SECOND_GEN'\n      then title || ' associated with public IPs.'\n    else title || ' not associated with public IPs.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_sql_database_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that Cloud SQL database instances do not have public IPs",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_with_no_public_ips",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    612393000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

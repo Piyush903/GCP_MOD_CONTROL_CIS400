@@ -1,0 +1,25 @@
+{
+  "index": "2e361073-da3d-411f-ac04-a1afd8647748",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_4_11",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when confidential_instance_config @> '{\"enableConfidentialCompute\": true}' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when confidential_instance_config @> '{\"enableConfidentialCompute\": true}'\n      then title || ' confidential computing enabled.'\n    else title || ' confidential computing not enabled.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": " Ensure that Compute instances have Confidential Computing enabled",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_instance_confidential_computing_enabled",
+  "controlLevel": "cis_v400_4_11",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    805397000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Engine"
+}

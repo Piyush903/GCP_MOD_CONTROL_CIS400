@@ -1,0 +1,25 @@
+{
+  "index": "a1e2d1c0-6a93-461c-baf5-e3d72bd0495f",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_2_12",
+  "severity": "medium",
+  "sql": "with associated_networks as (\n  select\n    split_part(network ->> 'networkUrl', 'networks/', 2) network_name,\n    enable_logging\n  from\n    gcp.gcp_dns_policy,\n    jsonb_array_elements(networks) network\n  where project_id=projectId\n  and cd_snapshot_version=snapshotVersion\n)\nselect\n  net.self_link resource,\n  case\n    when p.network_name is null then 'alarm'\n    when not p.enable_logging then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when p.network_name is null then net.title || ' not associated with DNS policy.'\n    when not p.enable_logging then net.title || ' associated with DNS policy with logging disabled.'\n    else net.title || ' associated with DNS policy with logging enabled.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_compute_network net\nleft join associated_networks p on net.name = p.network_name\nwhere net.project_id=projectId\nand net.cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that Cloud DNS logging is enabled for all VPC networks",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_network_dns_logging_enabled",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    944711000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Network"
+}

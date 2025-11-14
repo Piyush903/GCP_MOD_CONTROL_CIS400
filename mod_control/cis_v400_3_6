@@ -1,0 +1,26 @@
+{
+  "index": "71bda4a1-e552-4766-9075-f9da3400dfcb",
+  "description": "GCP `Firewall Rules` are specific to a `VPC Network`. Each rule either allows or denies traffic when its conditions are met. Its conditions allow the user to specify the type of traffic, such as ports and protocols, and the source or destination of the traffic, including IP addresses, subnets, and instances.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_3_6",
+  "severity": "high",
+  "sql": "with ip_protocol_all as ( select   name from   gcp_compute_firewall where   direction = 'INGRESS'   and action = 'Allow'   and source_ranges ?& array['0.0.0.0/0']   and (allowed @> '[{\\",
+  "title": "3.6 Ensure That SSH Access Is Restricted From the Internet",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    304228000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

@@ -1,0 +1,25 @@
+{
+  "index": "b02e2590-ba5c-44e3-b4c0-dc821d5883c1",
+  "description": "It is recommended to assign the Service Account User (iam.serviceAccountUser) and Service Account Token Creator (iam.serviceAccountTokenCreator) roles to a user for a specific service account rather than assigning the role to a user at project level.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_1_6",
+  "severity": "medium",
+  "sql": "\nWITH unapproved_bindings AS (\n  SELECT\n    project,\n    p,\n    REPLACE(entity, 'user:', '') AS entity\n  FROM\n    gcp.gcp_iam_policy,\n    jsonb_array_elements(bindings) AS p,\n    jsonb_array_elements_text(p -> 'members') AS entity\n  WHERE\n    p ->> 'role' IN (\n      'roles/iam.serviceAccountTokenCreator',\n      'roles/iam.serviceAccountUser'\n    )\n    AND entity NOT LIKE '%.gserviceaccount.com'\n    AND entity IS NOT NULL  -- Ensure entity is not null\n\tand project_id=projectId\n\tand cd_snapshot_version=snapshotVersion\n)\nSELECT\n  entity AS resource,\n  CASE\n    WHEN entity IS NOT NULL THEN 'alarm'\n    ELSE 'ok'\n  END AS status,\n  CASE\n    WHEN entity IS NOT NULL THEN 'IAM users associated with iam.serviceAccountTokenCreator or iam.serviceAccountUser role.'\n    ELSE 'No IAM users associated with iam.serviceAccountTokenCreator or iam.serviceAccountUser role.'\n  END AS reason,\n  p.location as location, p.project AS project\nFROM\n  gcp.gcp_iam_policy AS p\n  LEFT JOIN unapproved_bindings AS b ON p.project = b.project\nwhere p.project_id=projectId\nand p.cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that IAM users are not assigned the Service Account User or Service Account Token Creator roles at project level",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_user_not_assigned_service_account_user_role_project_level",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    852409000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "IAM Policy"
+}

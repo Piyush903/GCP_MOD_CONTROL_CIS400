@@ -1,0 +1,25 @@
+{
+  "index": "07d35113-6d11-4025-b228-df7450617851",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_3_5",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when visibility = 'private' then 'skip'\n    when dnssec_config_state is null then 'alarm'\n    when dnssec_config_default_key_specs @> '[{\"keyType\": \"zoneSigning\", \"algorithm\": \"rsasha1\"}]' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when visibility = 'private'\n      then title || ' is private.'\n    when dnssec_config_state is null\n      then title || ' DNSSEC not enabled.'\n    when dnssec_config_default_key_specs @> '[{\"keyType\": \"zoneSigning\", \"algorithm\": \"rsasha1\"}]'\n      then title || ' using RSASHA1 algorithm for zone-signing.'\n    else title || ' not using RSASHA1 algorithm for zone-signing.'\n  end as reason,\n  location as location,\n  project as project\nfrom\n  gcp.gcp_dns_managed_zone\nwhere project_id = projectId\n  and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure that RSASHA1 is not used for the zone-signing key in Cloud DNS DNSSEC",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.dns_managed_zone_zone_signing_not_using_rsasha1",
+  "controlLevel": "cis_v400_3_5",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    441545000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "DNS Managed Zone"
+}

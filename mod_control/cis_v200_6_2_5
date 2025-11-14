@@ -1,0 +1,25 @@
+{
+  "index": "e568f0c3-f58b-4320-9fe9-9ea9ce27beb2",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_6_2_5",
+  "severity": "low",
+  "sql": "select\n  self_link as resource,\n  case\n    when database_version not like 'POSTGRES%' then 'skip'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"log_min_messages\"}]') then 'alarm'\n    when database_flags @> '[{\"name\":\"log_min_messages\",\"value\":\"error\"}]' or database_flags @> '[{\"name\":\"log_min_messages\",\"value\":\"warning\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'POSTGRES%' then title || ' not a PostgreSQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"log_min_messages\"}]') then title || ' log_min_messages database flag not set.'\n    when database_flags @> '[{\"name\":\"log_min_messages\",\"value\":\"error\"}]' then title || ' log_min_messages database flag set to ERROR.'\n    when database_flags @> '[{\"name\":\"log_min_messages\",\"value\":\"warning\"}]' then title || ' log_min_messages database flag set to WARNING.'\n    else title || ' log_min_messages database flag not set at minimum to WARNING.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure that the 'Log_min_messages' Flag for a Cloud SQL PostgreSQL Instance is set at minimum to 'Warning'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_postgresql_log_min_messages_database_flag_error",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    632094000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

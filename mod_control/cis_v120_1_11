@@ -1,0 +1,25 @@
+{
+  "index": "8e58a74c-9570-461f-85e5-dc3ddfe5a08e",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_1_11",
+  "severity": "medium",
+  "sql": "\nwith users_with_roles as (\n  select\n    distinct split_part(member_entity, ':', 2) as user_name,\n    project,\n    location,\n    array_agg(distinct p ->> 'role') as assigned_roles\n  from\n    gcp.gcp_iam_policy,\n    jsonb_array_elements(bindings) as p,\n    jsonb_array_elements_text(p -> 'members') as member_entity\n  where\n    split_part(member_entity, ':', 1) = 'user'\n\tand project_id=projectId\n\tand cd_snapshot_version=snapshotVersion\n  group by\n    user_name,\n    project,\n    location\n),\nkms_roles_users as (\n  select\n    user_name,\n    project,\n    location,\n    assigned_roles\n  from\n    users_with_roles\n  where\n    'roles/cloudkms.admin' = any(assigned_roles)\n    and assigned_roles && array['roles/cloudkms.cryptoKeyEncrypterDecrypter', 'roles/cloudkms.cryptoKeyEncrypter', 'roles/cloudkms.cryptoKeyDecrypter']\n)\nselect\n  distinct r.user_name as resource,\n  case\n    when 'roles/cloudkms.admin' = any(r.assigned_roles) and k.user_name is null then 'ok'\n    when k.user_name is not null then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when 'roles/cloudkms.admin' = any(r.assigned_roles) and k.user_name is null then r.user_name || ' assigned only with KMS admin role.'\n    when k.user_name is not null then r.user_name || ' assigned with roles/cloudkms.admin, ' ||\n      concat_ws(', ',\n        case when 'roles/cloudkms.cryptoKeyEncrypterDecrypter' = any(r.assigned_roles) then 'roles/cloudkms.cryptoKeyEncrypterDecrypter' end,\n        case when 'roles/cloudkms.cryptoKeyEncrypter' = any(r.assigned_roles) then 'roles/cloudkms.cryptoKeyEncrypter' end,\n        case when 'roles/cloudkms.cryptoKeyDecrypter' = any(r.assigned_roles) then 'roles/cloudkms.cryptoKeyDecrypter' end\n        ) || ' KMS role(s).'\n    else r.user_name || ' not assigned with KMS admin and additional encrypter/decrypter roles.'\n  end as reason\n  , r.location as location, r.project as project\nfrom\n  users_with_roles as r\n  left join kms_roles_users as k on k.user_name = r.user_name and k.project = r.project;\n    \n   ",
+  "title": " Ensure that Separation of duties is enforced while assigning KMS related roles to users",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.kms_key_separation_of_duties_enforced",
+  "controlLevel": "cis_v400_1_11",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    704550000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "IAM Policy"
+}

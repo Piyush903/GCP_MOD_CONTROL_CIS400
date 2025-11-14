@@ -1,0 +1,26 @@
+{
+  "index": "683b397d-89c3-4d3d-9c13-dd88a84a3d29",
+  "description": "Google Cloud Virtual Machines have the ability via an OS Config agent API to periodically (about every 10 minutes) report OS inventory data. A patch compliance API periodically reads this data, and cross references metadata to determine if the latest updates are installed.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_4_12",
+  "severity": "high",
+  "sql": "select   'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,   'info' status,   'Manual verification required.' reason   , project_id as project from   gcp_project;",
+  "title": "4.12 Ensure the Latest Operating System Updates Are Installed On Your Virtual Machines in All Projects",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    302179000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

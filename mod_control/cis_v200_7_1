@@ -1,0 +1,25 @@
+{
+  "index": "8df693cb-0012-4986-a3dd-a0c9f1ab0b5f",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_7_1",
+  "severity": "high",
+  "sql": "SELECT\n  self_link AS resource,\n  CASE\n    WHEN access @> '[{\"specialGroup\": \"allAuthenticatedUsers\"}]' OR access @> '[{\"iamMember\": \"allUsers\"}]' THEN 'alarm'\n    ELSE 'ok'\n  END AS status,\n  CASE\n    WHEN access @> '[{\"specialGroup\": \"allAuthenticatedUsers\"}]' OR access @> '[{\"iamMember\": \"allUsers\"}]'\n      THEN title || ' publicly accessible.'\n    ELSE title || ' not anonymously or publicly accessible.'\n  END AS reason,\n  location AS location,\n  project AS project\nFROM\n  gcp.gcp_bigquery_dataset\nWHERE\n  project_id = projectId\n  AND cd_snapshot_version = snapshotVersion;",
+  "title": " Ensure that BigQuery datasets are not anonymously or publicly accessible",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.bigquery_dataset_not_publicly_accessible",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    484943000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "BigQuery Dataset"
+}

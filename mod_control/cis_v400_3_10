@@ -1,0 +1,26 @@
+{
+  "index": "56c85d0d-f65e-410a-b77c-9d6b37eb424b",
+  "description": "IAP authenticates the user requests to your apps via a Google single sign in. You can then manage these users with permissions to control access. It is recommended to use both IAP permissions and firewalls to restrict this access to your apps with sensitive information.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_3_10",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when       ( allowed @> '[{\\",
+  "title": "3.10 Use Identity Aware Proxy (IAP) to Ensure Only Traffic From Google IP Addresses are 'Allowed'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    304347000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

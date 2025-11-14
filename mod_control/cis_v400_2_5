@@ -1,0 +1,26 @@
+{
+  "index": "6b22694d-b45c-42f3-8974-38ae9517b129",
+  "description": "Google Cloud Platform (GCP) services write audit log entries to the Admin Activity and Data Access logs to help answer the questions of, \\",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_2_5",
+  "severity": "high",
+  "sql": "with filter_data as (   select     m.project as project,     display_name alert_name,     count(m.name) metric_name   from     gcp_monitoring_alert_policy,     jsonb_array_elements(conditions) as filter_condition     join gcp_logging_metric m on m.filter ~ '\\\\s*protoPayload.methodName\\\\s*=\\\\s*\\",
+  "title": "2.5 Ensure That the Log Metric Filter and Alerts Exist for Audit Configuration Changes",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    305975000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

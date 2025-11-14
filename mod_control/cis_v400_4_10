@@ -1,0 +1,26 @@
+{
+  "index": "5ccb7d7b-fdfb-4c19-8e4e-f46b7ed4d58f",
+  "description": "In order to maintain the highest level of security all connections to an application should be secure by default.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_4_10",
+  "severity": "high",
+  "sql": "select   'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,   'info' status,   'Manual verification required.' reason   , project_id as project from   gcp_project;",
+  "title": "4.10 Ensure That App Engine Applications Enforce HTTPS Connections",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    302119000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

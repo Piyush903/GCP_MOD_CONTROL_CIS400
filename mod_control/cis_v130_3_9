@@ -1,0 +1,25 @@
+{
+  "index": "e2d8fd4f-563a-48fe-993e-dfed3b6fe129",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_3_9",
+  "severity": "medium",
+  "sql": "with all_proxies as (\n  select\n    name,\n    self_link,\n    split_part(kind, '#', 2) proxy_type,\n    ssl_policy,\n    title,\n    location,\n    project\n  from\n    gcp.gcp_compute_target_ssl_proxy\n        where project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n  union\n  select\n    name,\n    self_link,\n    split_part(kind, '#', 2) proxy_type,\n    ssl_policy,\n    title,\n    location,\n    project\n  from\n    gcp.gcp_compute_target_https_proxy\n        where project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n),\nssl_policy_without_weak_cipher as (\n  select\n    self_link\n  from\n    gcp.gcp_compute_ssl_policy\n  where\n    ((profile = 'MODERN' and min_tls_version = 'TLS_1_2')\n    or profile = 'RESTRICTED'\n    or (profile = 'CUSTOM' and not (enabled_features ?| array['TLS_RSA_WITH_AES_128_GCM_SHA256', 'TLS_RSA_WITH_AES_256_GCM_SHA384', 'TLS_RSA_WITH_AES_128_CBC_SHA', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_3DES_EDE_CBC_SHA'])))\n        and project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n)\nselect\n  self_link resource,\n  case\n    when ssl_policy is null or ssl_policy in (select self_link from ssl_policy_without_weak_cipher) then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when ssl_policy is null\n      then proxy_type || ' ' || title || ' has no SSL policy.'\n    when ssl_policy is null or ssl_policy in (select self_link from ssl_policy_without_weak_cipher)\n      then proxy_type || ' ' || title || ' SSL policy contains CIS compliant cipher.'\n    else proxy_type || ' ' || title || ' SSL policy contains weak cipher.'\n  end as reason\n  , location as location, project as project\nfrom all_proxies;\n",
+  "title": "Ensure no HTTPS or SSL proxy load balancers permit SSL policies with weak cipher suites",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_ssl_policy_with_no_weak_cipher",
+  "controlLevel": "cis_v400_3_9",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    619745000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Proxy Load Balancers"
+}

@@ -1,0 +1,25 @@
+{
+  "index": "8bd6a535-cf7d-4d06-8d16-e37ba0e1fd9e",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_4_1",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'\n    when account ->> 'email' like '%-compute@developer.gserviceaccount.com' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node'\n      then title || ' created by GKE.'\n    when account ->> 'email' like '%-compute@developer.gserviceaccount.com'\n      then title || ' configured to use default service account.'\n    else title || ' not configured with default service account.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance,\n  jsonb_array_elements(service_accounts) account\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that instances are not configured to use the default service account",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_instance_with_no_default_service_account",
+  "controlLevel": "cis_v400_4_1",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    674555000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Engine"
+}

@@ -1,0 +1,25 @@
+{
+  "index": "a27b8d75-45ca-4b63-84ed-c363d9b3ab3f",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_6_3_2",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'SQLSERVER%' then 'skip'\n    when database_flags @> '[{\"name\":\"cross db ownership chaining\",\"value\":\"off\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'SQLSERVER%'\n      then title || ' not a SQL Server database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"cross db ownership chaining\"}]')\n      then title || ' ''cross db ownership chaining'' not set.'\n    when database_flags @> '[{\"name\":\"cross db ownership chaining\",\"value\":\"off\"}]'\n      then title || ' ''cross db ownership chaining'' database flag set to ''off''.'\n    else title || ' ''cross db ownership chaining'' database flag set to ''on''.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure that the 'cross db ownership chaining' database flag for Cloud SQL SQL Server instance is set to 'off'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_sql_cross_db_ownership_chaining_database_flag_off",
+  "controlLevel": "cis_v400_6_3_2",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    498974000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

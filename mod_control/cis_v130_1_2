@@ -1,0 +1,25 @@
+{
+  "index": "9e2104c1-31a2-4796-bc30-bd74da36dd02",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_1_2",
+  "severity": "high",
+  "sql": "select\n  'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n  'info' status,\n  'Manual verification required.' reason\n  , project_id as project\nfrom\n  gcp.gcp_project\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;\n",
+  "title": "Ensure that multi-factor authentication is enabled for all non-service accounts",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "cis_v400_1_2",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    577752000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}

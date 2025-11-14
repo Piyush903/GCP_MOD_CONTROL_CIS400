@@ -1,0 +1,25 @@
+{
+  "index": "79b3deda-e6bc-4f38-bef2-e789d35dc3ce",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_6_2_9",
+  "severity": "high",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'POSTGRES%' then 'skip'\n    when database_flags @> '[{\"name\":\"cloudsql.enable_pgaudit\",\"value\":\"on\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'POSTGRES%'\n      then title || ' not a PostgreSQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"cloudsql.enable_pgaudit\"}]')\n      then title || ' ''cloudsql.enable_pgaudit'' database flag not set.'\n    when database_flags @> '[{\"name\":\"cloudsql.enable_pgaudit\",\"value\":\"on\"}]'\n      then title || ' ''cloudsql.enable_pgaudit'' database flag enabled.'\n    else title || ' ''cloudsql.enable_pgaudit'' database flag disabled.'\n  end as reason\n    \n    , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure That 'cloudsql.enable_pgaudit' Database Flag for each Cloud Sql Postgresql Instance Is Set to 'on' For Centralized Logging",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_postgresql_cloudsql_pgaudit_database_flag_enabled",
+  "controlLevel": "cis_v200_6_2_8",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    828760000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

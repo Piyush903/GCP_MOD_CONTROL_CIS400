@@ -1,0 +1,25 @@
+{
+  "index": "40e000b9-0bd4-4cee-9047-c325a1301843",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_4_3",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'\n    when metadata -> 'items' @> '[{\"key\": \"block-project-ssh-keys\", \"value\": \"true\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node'\n      then title || ' created by GKE.'\n    when metadata -> 'items' @> '[{\"key\": \"block-project-ssh-keys\", \"value\": \"true\"}]'\n      then title || ' has \"Block Project-wide SSH keys\" enabled.'\n    else title || ' has \"Block Project-wide SSH keys\" disabled.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure 'Block Project-wide SSH keys' is enabled for VM instances",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_instance_block_project_wide_ssh_enabled",
+  "controlLevel": "cis_v400_4_3",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    591491000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Engine"
+}

@@ -1,0 +1,25 @@
+{
+  "index": "a2570093-4d61-4fda-a03a-18d8124e99a1",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_1_8",
+  "severity": "medium",
+  "sql": "with users_with_roles as (\n  select\n    distinct split_part(member_entity, ':', 2) as user_name,\n    project,\n    location,\n    p ->> 'role' as assigned_role\n  from\n    gcp.gcp_iam_policy,\n    jsonb_array_elements(bindings) as p,\n    jsonb_array_elements_text(p -> 'members') as member_entity\n  where\n    split_part(member_entity, ':', 1) = 'user'\n  and project_id=projectId\n  and cd_snapshot_version=snapshotVersion\n),\naccount_admin_users as(\n  select\n    user_name,\n    project,\n    location\n  from\n    users_with_roles\n  where assigned_role = 'roles/iam.serviceAccountAdmin'\n),\naccount_users as(\n  select\n    user_name,\n    project,\n    location\n  from\n    users_with_roles\n  where assigned_role = 'roles/iam.serviceAccountUser'\n)\nselect\n  distinct user_name as resource,\n  case\n    when user_name in (select user_name from account_users) and user_name in (select user_name from account_admin_users) then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when user_name in (select user_name from account_users) and user_name in (select user_name from account_admin_users)\n      then  user_name || ' assigned with both Service Account Admin and Service Account User roles.'\n    else user_name || ' not assigned with both Service Account Admin and Service Account User roles.'\n  end as reason\n  , location as location, project as project\nfrom\n  users_with_roles;",
+  "title": "Ensure that Separation of duties is enforced while assigning service account related roles to users",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_user_separation_of_duty_enforced",
+  "controlLevel": "cis_v400_1_8",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    621743000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "IAM Policy"
+}

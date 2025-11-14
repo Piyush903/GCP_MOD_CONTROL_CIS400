@@ -1,0 +1,25 @@
+{
+  "index": "83b17185-7105-4c66-96d0-e62014de9dce",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_4_4",
+  "severity": "medium",
+  "sql": "select\n  i.self_link resource,\n  case\n    when m.common_instance_metadata -> 'items' is null or not (m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\"}]') then 'alarm'\n    when m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"FALSE\"}]' then 'alarm'\n    when m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"TRUE\"}]' and i.metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"FALSE\"}]' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when\n      m.common_instance_metadata -> 'items' is null\n      or not(m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\"}]')\n      or m.common_instance_metadata -> 'items' @> '[{\"key\": \"enable-oslogin\", \"value\": \"FALSE\"}]'\n      then i.title || ' has OS login disabled at project level.'\n    when m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"TRUE\"}]' and i.metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"FALSE\"}]'\n      then i.title || ' OS login settings is disabled.'\n    when m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"TRUE\"}]' and i.metadata -> 'items' is null\n      then i.title || ' inherits OS login settings from project level.'\n    else i.title || ' OS login enabled.'\n  end as reason\n  \n  , i.location as location, i.project as project\nfrom\n  gcp.gcp_compute_instance i\n  left join gcp.gcp_compute_project_metadata m on i.project = m.project\nwhere i.project_id=projectId\nand i.cd_snapshot_version=snapshotVersion\nand m.project_id=projectId\nand m.cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure oslogin is enabled for a Project",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_instance_oslogin_enabled",
+  "controlLevel": "cis_v400_4_4",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    741186000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Engine"
+}

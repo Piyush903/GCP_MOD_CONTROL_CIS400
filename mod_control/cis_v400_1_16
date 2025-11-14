@@ -1,0 +1,26 @@
+{
+  "index": "29b693af-7704-45a6-9a3e-1d0a02c7d485",
+  "description": "It is recommended that Essential Contacts is configured to designate email addresses for Google Cloud services to notify of important technical or security information.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_16",
+  "severity": "high",
+  "sql": "-- \\\n",
+  "title": "1.16 Ensure Essential Contacts is Configured for Organization",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295867000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

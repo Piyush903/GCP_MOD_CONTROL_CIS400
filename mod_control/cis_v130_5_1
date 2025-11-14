@@ -1,0 +1,25 @@
+{
+  "index": "861ab1f5-1da0-4542-8239-721e97040b01",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_5_1",
+  "severity": "high",
+  "sql": "\nselect\n  self_link resource,\n  case\n    when iam_policy ->> 'bindings' like any (array ['%allAuthenticatedUsers%','%allUsers%']) then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when iam_policy ->> 'bindings' like any (array ['%allAuthenticatedUsers%','%allUsers%'])\n      then title || ' publicly accessible.'\n    else title || ' not publicly accessible.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n    gcp.gcp_storage_bucket\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": " Ensure that Cloud Storage bucket is not anonymously or publicly accessible",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.storage_bucket_not_publicly_accessible",
+  "controlLevel": "cis_v400_5_1",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    539373000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Storage Bucket"
+}

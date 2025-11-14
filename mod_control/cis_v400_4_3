@@ -1,0 +1,26 @@
+{
+  "index": "e514b984-e43f-4815-bf78-030849541b19",
+  "description": "It is recommended to use Instance specific SSH key(s) instead of using common/shared project-wide SSH key(s) to access Instances.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_4_3",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'     when metadata -> 'items' @> '[{\\",
+  "title": "4.3 Ensure 'Block Project-Wide SSH Keys' Is Enabled for VM Instances",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    301926000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

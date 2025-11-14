@@ -1,0 +1,26 @@
+{
+  "index": "13063447-77eb-419c-90c0-955fb3f17607",
+  "description": "The value of `log_statement` flag determined the SQL statements that are logged. Valid values are: 'none', 'ddl', 'mod', and 'all'.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_2_4",
+  "severity": "high",
+  "sql": "select   self_link as resource,   case     when database_version not like 'POSTGRES%' then 'skip'     when database_flags is null or not (database_flags @> '[{\\",
+  "title": "6.2.4 Ensure 'Log_statement' Database Flag for Cloud SQL PostgreSQL Instance Is Set Appropriately",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    297973000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

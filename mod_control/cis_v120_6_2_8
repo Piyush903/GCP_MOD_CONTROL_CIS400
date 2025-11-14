@@ -1,0 +1,25 @@
+{
+  "index": "a6ced9c5-d3f7-466b-8339-9881afb4a409",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_6_2_8",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'POSTGRES%' then 'skip'\n    when database_flags @> '[{\"name\":\"log_hostname\",\"value\":\"on\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'POSTGRES%'\n      then title || ' not a PostgreSQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"log_hostname\"}]')\n      then title || ' ''log_hostname'' database flag not set.'\n    when database_flags @> '[{\"name\":\"log_hostname\",\"value\":\"on\"}]'\n      then title || ' ''log_hostname'' database flag set to ''on''.'\n    else title || ' ''log_hostname'' database flag set to ''off''.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure 'log_hostname' database flag for Cloud SQL PostgreSQL instance is set appropriately",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_postgresql_log_hostname_database_flag_configured",
+  "controlLevel": "cis_v400_6_2_8",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    518499000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

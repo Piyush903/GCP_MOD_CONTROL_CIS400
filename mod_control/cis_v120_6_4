@@ -1,0 +1,25 @@
+{
+  "index": "d05e0ef9-cb2b-4f72-b661-fa925df0a933",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_6_4",
+  "severity": "critical",
+  "sql": "select\n  self_link resource,\n  case\n    when ip_configuration -> 'requireSsl' is null then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when ip_configuration -> 'requireSsl' is null\n      then title || ' does not enforce SSL connections.'\n    else title || ' enforces SSL connections.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": " Ensure that the Cloud SQL database instance requires all incoming connections to use SSL",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_require_ssl_enabled",
+  "controlLevel": "cis_v400_6_4",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    568687000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

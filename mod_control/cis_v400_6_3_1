@@ -1,0 +1,26 @@
+{
+  "index": "98f63665-d2a5-45d4-865c-8821fa2cfc1b",
+  "description": "It is recommended to set `external scripts enabled` database flag for Cloud SQL SQL Server instance to `off`.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_3_1",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when database_version not like 'SQLSERVER%' then 'skip'     when database_flags @> '[{\\",
+  "title": "6.3.1 Ensure 'external scripts enabled' Database Flag for Cloud SQL SQL Server Instance Is Set to 'off'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    298011000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

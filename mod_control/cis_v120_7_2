@@ -1,0 +1,25 @@
+{
+  "index": "92aa65ef-9fb9-43b2-ae55-76b5f8c14e39",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_7_2",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when kms_key_name is null then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when kms_key_name is null\n      then title || ' encrypted with Google managed cryptographic keys.'\n    else title || ' encrypted with customer-managed encryption keys.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_bigquery_table\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that all BigQuery Tables are encrypted with Customer-managed encryption key (CMEK)",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.bigquery_table_encrypted_with_cmk",
+  "controlLevel": "cis_v400_7_2",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    872076000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "BigQuery Table"
+}

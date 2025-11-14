@@ -1,0 +1,26 @@
+{
+  "index": "81f80954-b26b-49ea-aa41-5968a7444635",
+  "description": "Google Cloud Functions allow you to host serverless code that is executed when an event is triggered, without the requiring the management a host operating system. These functions can also store environment variables to be used by the code that may contain authentication or other information that needs to remain confidential.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_17",
+  "severity": "high",
+  "sql": "select   'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,   'info' status,   'Manual verification required.' reason   , project_id as project from   gcp_project;",
+  "title": "1.17 Ensure Secrets are Not Stored in Cloud Functions Environment Variables by Using Secret Manager",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295877000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

@@ -1,0 +1,12 @@
+{
+  "index": "a899c6b7-3ac9-4374-8481-a0cd0aaf211f",
+  "children": "{gcp_compliance.control.cis_v400_2_1,gcp_compliance.control.cis_v400_2_2,gcp_compliance.control.cis_v400_2_3,gcp_compliance.control.cis_v400_2_4,gcp_compliance.control.cis_v400_2_5,gcp_compliance.control.cis_v400_2_6,gcp_compliance.control.cis_v400_2_7,gcp_compliance.control.cis_v400_2_8,gcp_compliance.control.cis_v400_2_9,gcp_compliance.control.cis_v400_2_10,gcp_compliance.control.cis_v400_2_11,gcp_compliance.control.cis_v400_2_12,gcp_compliance.control.cis_v400_2_13,gcp_compliance.control.cis_v400_2_14,gcp_compliance.control.cis_v400_2_15,gcp_compliance.control.cis_v400_2_16}",
+  "description": "It is recommended that Cloud Audit Logging is configured to track all admin activities and read, write access to user data.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_2",
+  "title": "2 Logging and Monitoring",
+  "modifiedChildren": "{cis_v400_2_1,cis_v400_2_2,cis_v400_2_3,cis_v400_2_4,cis_v400_2_5,cis_v400_2_6,cis_v400_2_7,cis_v400_2_8,cis_v400_2_9,cis_v400_2_10,cis_v400_2_11,cis_v400_2_12,cis_v400_2_13,cis_v400_2_14,cis_v400_2_15,cis_v400_2_16}",
+  "parent": "cis_v400",
+  "isActive": true,
+  "accountId": null
+}

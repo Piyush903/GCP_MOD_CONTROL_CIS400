@@ -1,0 +1,26 @@
+{
+  "index": "0f8a6bed-85fa-4fe1-b50a-9d04753f9403",
+  "description": "It is recommended to enforce all incoming connections to SQL database instance to use SSL.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_4",
+  "severity": "high",
+  "sql": "select    self_link resource,   case     when ip_configuration ->> 'sslMode' = 'ENCRYPTED_ONLY' then 'ok'     else 'alarm'   end as status,   case     when ip_configuration ->> 'sslMode' = 'ENCRYPTED_ONLY'       then title || ' enforces SSL connections.'     else title || ' does not enforce SSL connections.'   end as reason      , location as location, project as project from   gcp_sql_database_instance;",
+  "title": "6.4 Ensure That the Cloud SQL Database Instance Requires All Incoming Connections To Use SSL",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    298075000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

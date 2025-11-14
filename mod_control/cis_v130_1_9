@@ -1,0 +1,25 @@
+{
+  "index": "250da613-f4f3-4eb3-a39a-f5388e408d21",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_1_9",
+  "severity": "high",
+  "sql": "with public_keys as (\n  select\n    distinct self_link\n  from\n    gcp.gcp_kms_key,\n    jsonb_array_elements(iam_policy -> 'bindings') as b\n  where\n    b -> 'members' ?| array['allAuthenticatedUsers', 'allUsers']\n        and project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n)\nselect\n  k.self_link as resource,\n  case\n    when p.self_link is null then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when p.self_link is null then title || ' in ' || k.key_ring_name || ' key ring not publicly accessible.'\n    else title || ' in ' || k.key_ring_name || ' key ring publicly accessible.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_kms_key k\nleft join public_keys p on k.self_link = p.self_link\n        where k.project_id=projectId\n        and k.cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that Cloud KMS cryptokeys are not anonymously or publicly accessible",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.kms_key_not_publicly_accessible",
+  "controlLevel": "cis_v400_1_9",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    676554000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "KMS Key"
+}

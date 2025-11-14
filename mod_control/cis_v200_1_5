@@ -1,0 +1,25 @@
+{
+  "index": "3a220d69-5149-476e-a438-8833e23543a5",
+  "description": "A service account is a special Google account that belongs to an application or a VM, instead of to an individual end-user. The application uses the service account to call the service's Google API so that users aren't directly involved. It's recommended not to use admin access for ServiceAccount.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_1_5",
+  "severity": "medium",
+  "sql": "WITH user_roles AS (\n  SELECT\n    location,\n    split_part(entity, ':', 2) AS user_name\n  FROM\n    gcp.gcp_iam_policy,\n    jsonb_array_elements(bindings) AS p,\n    jsonb_array_elements_text(p -> 'members') AS entity\n  WHERE\n    p ->> 'role' LIKE ANY (ARRAY ['%Owner', '%owner'])\n    AND split_part(entity, ':', 2) LIKE '%@' || project || '.iam.gserviceaccount.com'\n\tand project_id=projectId\n\tand cd_snapshot_version=snapshotVersion\n)\nSELECT\n  'https://iam.googleapis.com/v1/projects/' || project || '/serviceAccounts/' || name AS resource,\n  CASE\n    WHEN name NOT LIKE '%@' || project || '.iam.gserviceaccount.com' THEN 'skip'\n    WHEN name IN (\n      SELECT\n        user_name\n      FROM\n        user_roles\n    ) THEN 'alarm'\n    ELSE 'ok'\n  END AS status,\n  CASE\n    WHEN name NOT LIKE '%@' || project || '.iam.gserviceaccount.com' THEN 'Google-created service account ' || title || ' excluded.'\n    WHEN name IN (\n      SELECT\n        user_name\n      FROM\n        user_roles\n    ) THEN title || ' has admin privileges.'\n    ELSE title || ' has no admin privileges.'\n  END AS reason,\n  location AS location, \n  project AS project\nFROM\n  gcp.gcp_service_account\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that Service Account has no Admin privileges",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_service_account_without_admin_privilege",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    550586000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Service Account"
+}

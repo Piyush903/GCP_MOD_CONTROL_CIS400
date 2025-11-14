@@ -1,0 +1,26 @@
+{
+  "index": "dd8c4f84-c98f-414c-85e0-f658a2d02506",
+  "description": "It is recommended that uniform bucket-level access is enabled on Cloud Storage buckets.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_5_2",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when iam_configuration_uniform_bucket_level_access_enabled then 'ok'     else 'alarm'   end as status,   case     when iam_configuration_uniform_bucket_level_access_enabled       then title || ' uniform bucket-level access enabled.'     else title || ' uniform bucket-level access not enabled.'   end as reason      , location as location, project as project from   gcp_storage_bucket;",
+  "title": "5.2 Ensure That Cloud Storage Buckets Have Uniform Bucket-Level Access Enabled",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295394000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

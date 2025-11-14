@@ -1,0 +1,25 @@
+{
+  "index": "8e109e63-00ff-4b5a-a76e-d92b22b0c7bf",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_1_10",
+  "severity": "medium",
+  "sql": "select\n  self_link as resource,\n  case\n    when \"primary\" ->> 'state' = 'DESTROYED' then 'skip'\n    when \"primary\" ->> 'state' = 'DESTROY_SCHEDULED' then 'skip'\n    when \"primary\" ->> 'state' = 'DISABLED' then 'skip'\n    when split_part(rotation_period, 's', 1) :: int <= 7776000 then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when \"primary\" ->> 'state' = 'DESTROYED' then title || ' is destroyed.'\n    when \"primary\" ->> 'state' = 'DESTROY_SCHEDULED' then title || ' is scheduled for deletion.'\n    when \"primary\" ->> 'state' = 'DISABLED' then title || ' is disabled.'\n    when rotation_period is null then title || ' in ' || key_ring_name || ' requires manual rotation.'\n    else key_ring_name || ' ' || title || ' rotation period set for ' || (split_part(rotation_period, 's', 1) :: int)/86400 || ' day(s).'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_kms_key\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure KMS encryption keys are rotated within a period of 90 days",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.kms_key_rotated_within_90_day",
+  "controlLevel": "cis_v400_1_10",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    728613000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "KMS Key"
+}

@@ -1,0 +1,25 @@
+{
+  "index": "e33cbc58-ddb3-447e-9f00-ed130fefe626",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_6_7",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when backup_enabled then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when backup_enabled\n      then title || ' automatic backups configured.'\n    else title || ' automatic backups not configured.'\n  end as reason,\n  location as location,\n  project as project\nfrom\n  gcp.gcp_sql_database_instance\nwhere project_id = projectId\n  and cd_snapshot_version = snapshotVersion;",
+  "title": " Ensure that Cloud SQL database instances are configured with automated backups",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_automated_backups_enabled",
+  "controlLevel": "cis_v400_6_7",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    396387000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

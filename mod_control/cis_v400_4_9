@@ -1,0 +1,26 @@
+{
+  "index": "0a18c61a-8152-4431-8757-02b004d30e8e",
+  "description": "Compute instances should not be configured to have external IP addresses.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_4_9",
+  "severity": "high",
+  "sql": "with instance_without_access_config as (   select     name   from     gcp_compute_instance,     jsonb_array_elements(network_interfaces) nic   where     nic ->> 'accessConfigs' is null ), instance_with_access_config as (   select     name   from     gcp_compute_instance,     jsonb_array_elements(network_interfaces) nic,     jsonb_array_elements(nic -> 'accessConfigs') d   where     d ->> 'natIP' is null ) select   self_link resource,   case     when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'     when name in (select name from instance_without_access_config) then 'ok'     when name in (select name from instance_with_access_config) then 'ok'     else 'alarm'   end as status,   case     when name like 'gke-%' and labels ? 'goog-gke-node'       then title || ' created by GKE.'     when name in (select name from instance_without_access_config) or name in (select name from instance_with_access_config)       then title || ' not associated with public IP addresses.'     else title || ' associated with public IP addresses.'   end as reason      , location as location, project as project from   gcp_compute_instance;",
+  "title": "4.9 Ensure That Compute Instances Do Not Have Public IP Addresses",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    302100000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

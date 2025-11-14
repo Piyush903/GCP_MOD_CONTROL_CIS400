@@ -1,0 +1,25 @@
+{
+  "index": "a80d5a9e-b4a0-429f-8ce2-636c9b9a97ad",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_3_6",
+  "severity": "high",
+  "sql": "WITH ip_protocol_all AS (\n    SELECT\n        name\n    FROM\n        gcp.gcp_compute_firewall\n    WHERE\n        direction = 'INGRESS'\n        AND project_id=projectId\n        AND cd_snapshot_version=snapshotVersion\n        AND action = 'Allow'\n        AND source_ranges ?& array['0.0.0.0/0']\n        AND (allowed @> '[{\"IPProtocol\":\"all\"}]' OR allowed::text LIKE '%!{\"IPProtocol\": \"tcp\"}%')\n),\nip_protocol_tcp AS (\n    SELECT\n        name\n    FROM\n        gcp.gcp_compute_firewall,\n        jsonb_array_elements(allowed) AS p,\n        jsonb_array_elements_text(p -> 'ports') AS port\n    WHERE\n        direction = 'INGRESS'\n        AND project_id=projectId\n        AND cd_snapshot_version=snapshotVersion\n        AND action = 'Allow'\n        AND source_ranges ?& array['0.0.0.0/0']\n        AND p ->> 'IPProtocol' = 'tcp'\n        AND (\n            port = '22'\n            OR (\n                port LIKE '%-%'\n                AND split_part(port, '-', 1)::integer <= 22\n                AND split_part(port, '-', 2)::integer >= 22\n            )\n        )\n)\nSELECT\n    self_link AS resource,\n    CASE\n        WHEN name IN (SELECT name FROM ip_protocol_tcp) THEN 'alarm'\n        WHEN name IN (SELECT name FROM ip_protocol_all) THEN 'alarm'\n        ELSE 'ok'\n    END AS status,\n    CASE\n        WHEN name IN (SELECT name FROM ip_protocol_tcp) OR name IN (SELECT name FROM ip_protocol_all)\n            THEN title || ' allows SSH access from internet.'\n        ELSE title || ' restricts SSH access from internet.'\n    END AS reason,\n    location AS region,\n    project\nFROM\n    gcp.gcp_compute_firewall\nWHERE\n    project_id=projectId\n    AND cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that SSH access is restricted from the internet",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_firewall_rule_ssh_access_restricted",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    454311000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Firewall"
+}

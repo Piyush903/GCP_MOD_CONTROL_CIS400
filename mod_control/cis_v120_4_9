@@ -1,0 +1,25 @@
+{
+  "index": "57d7a125-ba82-4089-b6f7-a7a581cea724",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_4_9",
+  "severity": "high",
+  "sql": "\nwith instance_without_access_config as (\n  select\n    name\n  from\n    gcp.gcp_compute_instance,\n    jsonb_array_elements(network_interfaces) nic\n  where\n    nic ->> 'accessConfigs' is null\n\tand project_id=projectId\n\tand cd_snapshot_version=snapshotVersion\n),\ninstance_with_access_config as (\n  select\n    name\n  from\n    gcp.gcp_compute_instance,\n    jsonb_array_elements(network_interfaces) nic,\n    jsonb_array_elements(nic -> 'accessConfigs') d\n  where\n    d ->> 'natIP' is null\n\tand project_id=projectId\n\tand cd_snapshot_version=snapshotVersion\n)\nselect\n  self_link resource,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'\n    when name in (select name from instance_without_access_config) then 'ok'\n    when name in (select name from instance_with_access_config) then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node'\n      then title || ' created by GKE.'\n    when name in (select name from instance_without_access_config) or name in (select name from instance_with_access_config)\n      then title || ' not associated with public IP addresses.'\n    else title || ' associated with public IP addresses.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that Compute instances do not have public IP addresses",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_instance_with_no_public_ip_addresses",
+  "controlLevel": "cis_v400_4_9",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    656706000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Engine"
+}

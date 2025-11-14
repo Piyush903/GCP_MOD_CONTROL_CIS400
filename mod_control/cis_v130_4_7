@@ -1,0 +1,25 @@
+{
+  "index": "cc66ab99-4fc5-4026-bc33-2c0dbedfb548",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_4_7",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when disk_encryption_key_type = 'Customer supplied' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when disk_encryption_key_type = 'Customer supplied'\n      then title || ' encrypted with customer-supplied encryption keys (CSEK).'\n    when disk_encryption_key_type = 'Customer managed'\n      then title || ' encrypted with customer-managed encryption keys.'\n    else title || ' encrypted with default Google-managed keys.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_disk\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure VM disks for critical VMs are encrypted with Customer-Supplied Encryption Keys (CSEK)",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_disk_encrypted_with_csk",
+  "controlLevel": "cis_v400_4_7",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    701568000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Disk"
+}

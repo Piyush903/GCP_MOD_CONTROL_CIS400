@@ -1,0 +1,26 @@
+{
+  "index": "a44a55b9-a5c5-4465-afd8-050050a32923",
+  "description": "Ensure cloudsql.enable_pgaudit database flag for Cloud SQL PostgreSQL instance is set to on to allow for centralized logging.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_2_8",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when database_version not like 'POSTGRES%' then 'skip'     when database_flags @> '[{\\",
+  "title": "6.2.8 Ensure That 'cloudsql.enable_pgaudit' Database Flag for each Cloud Sql Postgresql Instance Is Set to 'on' For Centralized Logging",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    298004000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

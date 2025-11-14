@@ -1,0 +1,26 @@
+{
+  "index": "a99191e9-ed21-4847-9418-c330229fc3c5",
+  "description": "Enabling OS login binds SSH certificates to IAM users and facilitates effective SSH certificate management.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_4_4",
+  "severity": "high",
+  "sql": "with project_metadata as (     select       m.project,       coalesce(         (           select lower(item ->> 'value')           from jsonb_array_elements(m.common_instance_metadata -> 'items') as item           where lower(item ->> 'key') = 'enable-oslogin'           limit 1         ), ''       ) as project_oslogin     from       gcp_compute_project_metadata m   ), instance_metadata as (     select       i.self_link,       i.title,       i.project,       i.tags,       i.location,       i._ctx,       coalesce(         (           select lower(item ->> 'value')           from jsonb_array_elements(i.metadata -> 'items') as item           where lower(item ->> 'key') = 'enable-oslogin'           limit 1         ), ''       ) as instance_oslogin     from       gcp_compute_instance i   ) select   i.self_link as resource,   case     when pm.project_oslogin = '' then 'alarm'     when pm.project_oslogin in ('false', 'n', 'no', '0') then 'alarm'     when pm.project_oslogin in ('true', 'y', 'yes', '1')         and i.instance_oslogin in ('false', 'n', 'no', '0') then 'alarm'     else 'ok'   end as status,   case     when pm.project_oslogin = '' then i.title || ' has OS login disabled at project level.'     when pm.project_oslogin in ('false', 'n', 'no', '0') then i.title || ' has OS login disabled at project level.'     when pm.project_oslogin in ('true', 'y', 'yes', '1') and i.instance_oslogin in ('false', 'n', 'no', '0') then i.title || ' OS login setting is disabled at instance level.'     when pm.project_oslogin in ('true', 'y', 'yes', '1') and i.instance_oslogin = '' then i.title || ' inherits OS login enabled setting from project level.'     else i.title || ' OS login enabled.'   end as reason      , i.location as location, i.project as project from   instance_metadata i   left join project_metadata pm on pm.project = i.project;",
+  "title": "4.4 Ensure Oslogin Is Enabled for a Project",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    301974000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

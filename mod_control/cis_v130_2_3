@@ -1,0 +1,25 @@
+{
+  "index": "2c08f7c1-ace6-4e23-a90b-e388e1e97a83",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_2_3",
+  "severity": "low",
+  "sql": "\nwith logging_sinks as (\n  select\n    self_link,\n    title,\n    project,\n    location,\n    destination\n  from\n    gcp.gcp_logging_sink\n        where project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n)\nselect\n  s.self_link resource,\n  case\n    when b.retention_policy is not null and b.retention_policy ->> 'isLocked' = 'true' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when b.retention_policy is not null and b.retention_policy ->> 'isLocked' = 'true'\n      then s.title || '''s logging bucket ' || b.name || ' has retention policies configured.'\n    else s.title || '''s logging bucket ' || b.name || ' has retention policies not configured.'\n  end as reason\n  , s.location as location, s.project as project\nfrom\n  gcp.gcp_storage_bucket b\n  join logging_sinks s on (\n  split_part(s.destination, '/', 1) = 'storage.googleapis.com'\n  and split_part(s.destination, '/', 2) = b.name\n)\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that retention policies on log buckets are configured using Bucket Lock",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.logging_bucket_retention_policy_enabled",
+  "controlLevel": "cis_v400_2_3",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    596490000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Logging Sink"
+}

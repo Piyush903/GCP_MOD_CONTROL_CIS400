@@ -1,0 +1,26 @@
+{
+  "index": "3939c823-f6e7-4682-829b-5f99880fcb08",
+  "description": "Flow Logs is a feature that enables users to capture information about the IP traffic going to and from network interfaces in the organization's VPC Subnets. Once a flow log is created, the user can view and retrieve its data in Stackdriver Logging. It is recommended that Flow Logs be enabled for every business-critical VPC subnet.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_3_8",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when enable_flow_logs then 'ok'     else 'alarm'   end as status,   case     when enable_flow_logs       then title || ' flow logging enabled.'     else title || ' flow logging disabled.'   end as reason   , location as location, project as project from   gcp_compute_subnetwork;",
+  "title": "3.8 Ensure that VPC Flow Logs is Enabled for Every Subnet in a VPC Network",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    304272000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

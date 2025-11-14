@@ -1,0 +1,25 @@
+{
+  "index": "ab1f77bf-5586-4933-a535-4fccd8d60646",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_3_8",
+  "severity": "low",
+  "sql": "select\n  self_link resource,\n  case\n    when enable_flow_logs then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when enable_flow_logs\n      then title || ' flow logging enabled.'\n    else title || ' flow logging disabled.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_compute_subnetwork\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_subnetwork_flow_log_enabled",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    636123000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute SubNetwork"
+}

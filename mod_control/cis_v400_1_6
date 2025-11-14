@@ -1,0 +1,26 @@
+{
+  "index": "f75d0f5b-3b4c-43ea-a847-25d2586ae5e3",
+  "description": "It is recommended to assign the Service Account User (iam.serviceAccountUser) and Service Account Token Creator (iam.serviceAccountTokenCreator) roles to a user for a specific service account rather than assigning the role to a user at project level.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_6",
+  "severity": "high",
+  "sql": "with unapproved_bindings as (   select     project,     p,     entity   from     gcp_iam_policy,     jsonb_array_elements(bindings) as p,     jsonb_array_elements_text(p -> 'members') as entity   where     p ->> 'role' in ('roles/iam.serviceAccountTokenCreator','roles/iam.serviceAccountUser')     and entity not like '%iam.gserviceaccount.com' ) select   p.project as resource,   case     when entity is not null then 'alarm'     else 'ok'   end as status,   case     when entity is not null       then 'IAM users associated with iam.serviceAccountTokenCreator or iam.serviceAccountUser role.'     else 'No IAM users associated with iam.serviceAccountTokenCreator or iam.serviceAccountUser role.'   end as reason   , p.project as project from   gcp_iam_policy as p   left join unapproved_bindings as b on p.project = b.project;",
+  "title": "1.6 Ensure That IAM Users Are Not Assigned the Service Account User or Service Account Token Creator Roles at Project Level",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295750000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

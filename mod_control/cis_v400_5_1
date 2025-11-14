@@ -1,0 +1,26 @@
+{
+  "index": "b8e05e61-1da7-4f70-b6dc-eecc6b57f138",
+  "description": "It is recommended that IAM policy on Cloud Storage bucket does not allows anonymous or public access.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_5_1",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when iam_policy ->> 'bindings' like any (array ['%allAuthenticatedUsers%','%allUsers%']) then 'alarm'     else 'ok'   end as status,   case     when iam_policy ->> 'bindings' like any (array ['%allAuthenticatedUsers%','%allUsers%'])       then title || ' publicly accessible.'     else title || ' not publicly accessible.'   end as reason      , location as location, project as project from   gcp_storage_bucket;",
+  "title": "5.1 Ensure That Cloud Storage Bucket Is Not Anonymously or Publicly Accessible",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295380000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

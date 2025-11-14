@@ -1,0 +1,25 @@
+{
+  "index": "ccbf6398-fcf4-4959-81eb-261b6918fb87",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_6_5",
+  "severity": "critical",
+  "sql": "select\n  self_link as resource,\n  case\n    when exists (\n      select 1\n      from jsonb_array_elements(ip_configuration -> 'authorizedNetworks') as authNet\n      where authNet ->> 'value' = '0.0.0.0/0' or authNet ->> 'value' = '::/0'\n    ) then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when exists (\n      select 1\n      from jsonb_array_elements(ip_configuration -> 'authorizedNetworks') as authNet\n      where authNet ->> 'value' = '0.0.0.0/0' or  authNet ->> 'value' = '::/0'\n    ) then title || ' is open to the internet.'\n    else title || ' is not open to the internet.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": " Ensure That Cloud SQL Database Instances Do Not Implicitly Whitelist All Public IP Addresses",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_not_open_to_internet",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    898656000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

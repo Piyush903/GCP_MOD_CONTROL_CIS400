@@ -1,0 +1,25 @@
+{
+  "index": "22d30178-b93c-4586-8bde-694f5edb9b77",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_1_4",
+  "severity": "medium",
+  "sql": "\nwith service_account_key as (\n  select\n    distinct service_account_name\n  from\n    gcp.gcp_service_account_key\n  where\n    key_type = 'USER_MANAGED'\n\tand project_id=projectId\n\tand cd_snapshot_version=snapshotVersion\n)\nselect\n  'https://iam.googleapis.com/v1/projects/' || project || '/serviceAccounts/' || name as resource,\n  case\n    when name like '%iam.gserviceaccount.com' and name in (select service_account_name from service_account_key) then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when name like '%iam.gserviceaccount.com' and name in (select service_account_name from service_account_key)\n      then title || ' has user-managed keys.'\n    else title || ' does not have user-managed keys.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_service_account\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure that there are only GCP-managed service account keys for each service account",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_service_account_gcp_managed_key",
+  "controlLevel": "cis_v400_1_4",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    427476000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Service Account"
+}

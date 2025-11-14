@@ -1,0 +1,26 @@
+{
+  "index": "8d573f47-ed64-4430-a816-1db55c9c7352",
+  "description": "It is recommended to set `remote access` database flag for Cloud SQL SQL Server instance to `off`.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_3_5",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when database_version not like 'SQLSERVER%' then 'skip'     when database_flags @> '[{\\",
+  "title": "6.3.5 Ensure 'remote access' Database Flag for Cloud SQL SQL Server Instance Is Set to 'off'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    298050000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

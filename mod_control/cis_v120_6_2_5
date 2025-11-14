@@ -1,0 +1,25 @@
+{
+  "index": "4c44fb1f-e11f-4aa6-9508-4904e95555e5",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_6_2_5",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'POSTGRES%' then 'skip'\n    when database_flags @> '[{\"name\":\"log_duration\",\"value\":\"on\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'POSTGRES%'\n      then title || ' not a PostgreSQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"log_duration\"}]')\n      then title || ' ''log_duration'' database flag not set.'\n    when database_flags @> '[{\"name\":\"log_duration\",\"value\":\"on\"}]'\n      then title || ' ''log_duration'' database flag set to ''on''.'\n    else title || ' ''log_duration'' database flag set to ''off''.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n    gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure 'log_duration' database flag for Cloud SQL PostgreSQL instance is set to 'on'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_postgresql_log_duration_database_flag_on",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    661046000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

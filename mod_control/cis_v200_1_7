@@ -1,0 +1,25 @@
+{
+  "index": "baaaf959-96df-41bd-bfb5-3a10d0a8e20c",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_1_7",
+  "severity": "medium",
+  "sql": "select\n  'https://iam.googleapis.com/v1/projects/' || project || '/serviceAccounts/' || service_account_name || '/keys/' || name as resource,\n  case\n    when valid_after_time <= (current_date - interval '90' day) then 'alarm'\n    else 'ok'\n  end as status,\n  service_account_name || ' ' || name || ' created ' || to_char(valid_after_time , 'DD-Mon-YYYY') ||\n    ' (' || extract(day from current_timestamp - valid_after_time) || ' days).'\n  as reason\n  , location as location, project as project\nfrom\ngcp.gcp_service_account_key\nwhere\n  key_type = 'USER_MANAGED'\nand project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure user-managed/external keys for service accounts are rotated every 90 days or less",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_service_account_key_age_90",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    475370000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Service Account key"
+}

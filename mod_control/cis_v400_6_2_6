@@ -1,0 +1,26 @@
+{
+  "index": "07c43614-63e5-43bc-adf7-7c97cf05a441",
+  "description": "The `log_min_error_statement` flag defines the minimum message severity level that are considered as an error statement.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_2_6",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when database_version not like 'POSTGRES%' then 'skip'     when database_flags @> '[{\\",
+  "title": "6.2.6 Ensure 'Log_min_error_statement' Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'Error' or Stricter",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    297988000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

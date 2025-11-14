@@ -1,0 +1,25 @@
+{
+  "index": "31b9c909-f401-4abb-91a9-20738e88a351",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_6_2_9",
+  "severity": "high",
+  "sql": "select\n  self_link as resource,\n  case\n    when (ip_addresses @> '[{\"type\": \"PRIVATE\"}]' and ip_configuration ->> 'privateNetwork' is not null) and not (ip_addresses @> '[{\"type\": \"PRIMARY\"}]') then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when (ip_addresses @> '[{\"type\": \"PRIVATE\"}]' and ip_configuration ->> 'privateNetwork' is not null) and not (ip_addresses @> '[{\"type\": \"PRIMARY\"}]') then title || ' not publicly accessible.'\n    else title || ' publicly accessible.'\n  end as reason\n    \n    , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure Instance IP assignment is set to private",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_not_publicly_accessible",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    492444000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

@@ -1,0 +1,26 @@
+{
+  "index": "a8243a08-da25-4bdc-8034-0f57c7d75cd1",
+  "description": "The `log_min_messages` flag defines the minimum message severity level that is considered as an error statement. Messages for error statements are logged with the SQL statement. Valid values include DEBUG5, DEBUG4, DEBUG3, DEBUG2, DEBUG1, INFO, NOTICE, WARNING, ERROR, LOG, FATAL, and PANIC. Each severity level includes the subsequent levels mentioned above. ERROR is considered the best practice setting. Changes should only be made in accordance with the organization's logging policy.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_2_5",
+  "severity": "high",
+  "sql": "select   self_link as resource,   case     when database_version not like 'POSTGRES%' then 'skip'     when database_flags is null or not (database_flags @> '[{\\",
+  "title": "6.2.5 Ensure that the 'Log_min_messages' Flag for a Cloud SQL PostgreSQL Instance is set at minimum to 'Warning'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    297980000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

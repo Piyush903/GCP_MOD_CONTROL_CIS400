@@ -1,0 +1,26 @@
+{
+  "index": "0af90b77-e0b5-4810-8519-34704675d412",
+  "description": "It is recommended that the IAM policy on BigQuery datasets does not allow anonymous and/or public access.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_7_1",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when access @> '[{\\",
+  "title": "7.1 Ensure That BigQuery Datasets Are Not Anonymously or Publicly Accessible",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    300877000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

@@ -1,0 +1,26 @@
+{
+  "index": "c6798a0c-62ab-403f-af01-e5d50d5d29e1",
+  "description": "API Keys should only be used for services in cases where other authentication methods are unavailable. If they are in use it is recommended to rotate API keys every 90 days.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_15",
+  "severity": "high",
+  "sql": "select   'https://iam.googleapis.com/v1/projects/' || project || '/apikeys/' || name as resource,   case     when create_time <= (current_date - interval '90' day) then 'alarm'     else 'ok'   end as status,   display_name || ' ' || uid || ' created ' || to_char(create_time , 'DD-Mon-YYYY') ||     ' (' || extract(day from current_timestamp - create_time) || ' days).'   as reason   , project as project from   gcp_apikeys_key;",
+  "title": "1.15 Ensure API Keys Are Rotated Every 90 Days",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295857000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

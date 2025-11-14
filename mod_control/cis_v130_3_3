@@ -1,0 +1,25 @@
+{
+  "index": "5d4de819-a842-48e7-915b-d507c70aa562",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_3_3",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when visibility = 'private' then 'skip'\n    when visibility = 'public' and (dnssec_config_state is null or dnssec_config_state = 'off') then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when visibility = 'private'\n      then title || ' is private.'\n    when visibility = 'public' and (dnssec_config_state is null or dnssec_config_state = 'off')\n      then title || ' DNSSEC not enabled.'\n    else title || ' DNSSEC enabled.'\n  end as reason,\n  location as location,\n  project as project\nfrom\n  gcp.gcp_dns_managed_zone\nwhere project_id = projectId\n  and cd_snapshot_version = snapshotVersion;",
+  "title": "Ensure that DNSSEC is enabled for Cloud DNS",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.dns_managed_zone_dnssec_enabled",
+  "controlLevel": "master",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    696990000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "DNS Managed Zone"
+}

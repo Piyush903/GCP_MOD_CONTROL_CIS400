@@ -1,0 +1,26 @@
+{
+  "index": "f0cc9821-57f2-4837-8544-75cf19c654bd",
+  "description": "Service Account keys consist of a key ID (Private_key_Id) and Private key, which are used to sign programmatic requests users make to Google cloud services accessible to that particular service account. It is recommended that all Service Account keys are regularly rotated.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_7",
+  "severity": "high",
+  "sql": "select   'https://iam.googleapis.com/v1/projects/' || project || '/serviceAccounts/' || service_account_name || '/keys/' || name as resource,   case     when valid_after_time <= (current_date - interval '90' day) then 'alarm'     else 'ok'   end as status,   service_account_name || ' ' || name || ' created ' || to_char(valid_after_time , 'DD-Mon-YYYY') ||     ' (' || extract(day from current_timestamp - valid_after_time) || ' days).'   as reason   , project as project from   gcp_service_account_key where   key_type = 'USER_MANAGED';",
+  "title": "1.7 Ensure User-Managed/External Keys for Service Accounts Are Rotated Every 90 Days or Fewer",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    295765000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

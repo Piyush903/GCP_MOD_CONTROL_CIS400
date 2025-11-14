@@ -1,0 +1,25 @@
+{
+  "index": "951d33b2-fdaf-466d-be23-67a96336f723",
+  "description": "When you use Dataproc, cluster and job data is stored on Persistent Disks (PDs) associated with the Compute Engine VMs in your cluster and in a Cloud Storage staging bucket. This PD and bucket data is encrypted using a Google-generated data encryption key (DEK) and key encryption key (KEK). The CMEK feature allows you to create, use, and revoke the key encryption key (KEK). Google still controls the data encryption key (DEK).",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v200_1_17",
+  "severity": "low",
+  "sql": "select\n  cluster_name resource,\n  case\n    when config -> 'encryptionConfig' ->> 'gcePdKmsKeyName' is null then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when config -> 'encryptionConfig' ->> 'gcePdKmsKeyName' is null then title || ' is not encrypted using customer-managed encryption keys (CMEK).'\n    else title || ' is encrypted using customer-managed encryption keys (CMEK).'\n  end as reason,\n  location as location,\n  project as project\nfrom\n  gcp.gcp_dataproc_cluster\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "1.17 Ensure that dataproc cluster is encrypted using customer-managed encryption key",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.dataproc_cluster_encryption_with_cmek",
+  "controlLevel": "master",
+  "createdAt": [
+    2024,
+    6,
+    29,
+    15,
+    0,
+    35,
+    640614000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Dataproc Cluster"
+}

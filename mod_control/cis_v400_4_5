@@ -1,0 +1,26 @@
+{
+  "index": "73afa6e1-b44f-40ab-859e-ac7885f31145",
+  "description": "Interacting with a serial port is often referred to as the serial console, which is similar to using a terminal window, in that input and output is entirely in text mode and there is no graphical interface or mouse support.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_4_5",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when metadata -> 'items' @> '[{\\",
+  "title": "4.5 Ensure 'Enable Connecting to Serial Ports' Is Not Enabled for VM Instance",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    301993000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

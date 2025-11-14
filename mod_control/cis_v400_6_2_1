@@ -1,0 +1,26 @@
+{
+  "index": "d82182c1-98ad-4db5-be48-eafe9429ff56",
+  "description": "The `log_error_verbosity` flag controls the verbosity/details of messages logged. Valid values are: 'TERSE', 'DEFAULT', and 'VERBOSE'.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_2_1",
+  "severity": "high",
+  "sql": "select   self_link as resource,   case     when database_version not like 'POSTGRES%' then 'skip'     when database_flags @> '[{\\",
+  "title": "6.2.1 Ensure 'Log_error_verbosity' Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'DEFAULT' or Stricter",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    297949000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

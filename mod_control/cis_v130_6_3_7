@@ -1,0 +1,25 @@
+{
+  "index": "1ee3878e-79ca-497c-8906-a0639ff2d27a",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v130_6_3_7",
+  "severity": "high",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'SQLSERVER%' then 'skip'\n    when database_flags @> '[{\"name\":\"contained database authentication\",\"value\":\"off\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'SQLSERVER%'\n      then title || ' not a SQL Server database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"contained database authentication\"}]')\n      then title || ' ''contained database authentication'' not set.'\n    when database_flags @> '[{\"name\":\"contained database authentication\",\"value\":\"off\"}]'\n      then title || ' ''contained database authentication'' database flag set to ''off''.'\n    else title || ' ''contained database authentication'' database flag set to ''on''.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_sql_database_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;\n",
+  "title": " Ensure that the 'contained database authentication' database flag for Cloud SQL on the SQL Server instance is set to 'off'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_sql_contained_database_authentication_database_flag_off",
+  "controlLevel": "cis_v400_6_3_7",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    738786000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "SQL Database Instance"
+}

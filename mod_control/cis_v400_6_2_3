@@ -1,0 +1,26 @@
+{
+  "index": "ba30d7b8-c62c-467f-8b0d-44575e8bd5ce",
+  "description": "Enabling the `log_disconnections` setting logs the end of each session, including the session duration.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_2_3",
+  "severity": "high",
+  "sql": "select   self_link resource,   case     when database_version not like 'POSTGRES%' then 'skip'     when database_flags @> '[{\\",
+  "title": "6.2.3 Ensure That the 'Log_disconnections' Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'On'",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.manual_control",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    14,
+    3,
+    5,
+    43,
+    297963000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project",
+  "isMaster": true
+}

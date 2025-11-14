@@ -1,0 +1,25 @@
+{
+  "index": "0be68298-f407-42a5-8ae7-f49c995a5c75",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_3_2",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when ipv4_range is not null then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when ipv4_range is not null\n      then title || ' is a legacy network.'\n    else title || ' not a legacy network.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_compute_network\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure legacy networks do not exist for a project",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.compute_network_contains_no_legacy_network",
+  "controlLevel": "cis_v400_3_2",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    687597000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Compute Network"
+}
