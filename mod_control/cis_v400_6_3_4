@@ -1,10 +1,10 @@
 {
-  "index": "a26d9ae1-53c9-49d9-b7d8-d87dd1a475fb",
+  "index": "3c74ad9f-45da-462f-9a55-89f2b4665cf5",
   "description": "The `user options` option specifies global defaults for all users. A list of default query processing options is established for the duration of a user's work session. The user options option allows you to change the default values of the SET options (if the server's default settings are not appropriate).",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_4",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'SQLSERVER%' then 'skip'\n    when database_flags @> '[{\"name\":\"user options\"}]' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when database_version not like 'SQLSERVER%'\n      then title || ' not a SQL Server database.'\n    when database_flags @> '[{\"name\":\"user options\"}]'\n      then title || ' ''user options'' database flag set.'\n    else title || ' ''user options'' database flag not set.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.3.4 Ensure 'user options' Database Flag for Cloud SQL SQL Server Instance Is Not Configured",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    298040000
+    23,
+    10,
+    15,
+    29,
+    723849000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_3_4"
 }

@@ -21,5 +21,6 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type": "Compute Engine"
+  "type": "Compute Engine",
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v130_4_4"
 }

@@ -1,10 +1,10 @@
 {
-  "index": "82f80390-e309-4881-b905-beb69693c4b8",
+  "index": "18baf69e-3e7a-4b02-9adf-273eecbf1038",
   "description": "It is recommended to set `3625 (trace flag)` database flag for Cloud SQL SQL Server instance to `on`.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_6",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link as resource,\n  case\n    when database_version not like 'SQLSERVER%' then 'skip'\n    when database_flags @> '[{\"name\":\"3625\",\"value\":\"on\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'SQLSERVER%' then title || ' not a SQL Server database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"3625\"}]') then title || ' ''3625 (trace flag)'' not set.'\n    when database_flags @> '[{\"name\":\"3625\",\"value\":\"on\"}]' then title || ' ''3625 (trace flag)'' database flag set to ''on''.'\n    else title || ' ''3625 (trace flag)'' database flag set to ''off''.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.3.6 Ensure '3625 (trace flag)' Database Flag for all Cloud SQL SQL Server Instances Is Set to 'on'",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    298057000
+    23,
+    10,
+    15,
+    29,
+    723860000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_3_6"
 }

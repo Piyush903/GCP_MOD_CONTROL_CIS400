@@ -21,5 +21,6 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type": "IAM Policy"
+  "type": "IAM Policy",
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v130_1_8"
 }

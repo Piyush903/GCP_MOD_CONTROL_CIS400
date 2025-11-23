@@ -9,7 +9,7 @@
   "path": null,
   "qualifiedName": null,
   "query": "gcp_compliance.query.dataproc_cluster_encryption_with_cmek",
-  "controlLevel": "master",
+  "controlLevel": "cis_v400_1_17",
   "createdAt": [
     2024,
     6,
@@ -21,5 +21,6 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type": "Dataproc Cluster"
+  "type": "Dataproc Cluster",
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v200_1_17"
 }

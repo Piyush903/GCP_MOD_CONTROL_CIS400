@@ -1,10 +1,10 @@
 {
-  "index": "71bda4a1-e552-4766-9075-f9da3400dfcb",
+  "index": "60b4785a-992a-4503-8296-e4aae2fae6a9",
   "description": "GCP `Firewall Rules` are specific to a `VPC Network`. Each rule either allows or denies traffic when its conditions are met. Its conditions allow the user to specify the type of traffic, such as ports and protocols, and the source or destination of the traffic, including IP addresses, subnets, and instances.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_6",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "WITH ip_protocol_all AS (\n    SELECT\n        name\n    FROM\n        gcp.gcp_compute_firewall\n    WHERE\n        direction = 'INGRESS'\n        AND project_id=projectId\n        AND cd_snapshot_version=snapshotVersion\n        AND action = 'Allow'\n        AND source_ranges ?& array['0.0.0.0/0']\n        AND (allowed @> '[{\"IPProtocol\":\"all\"}]' OR allowed::text LIKE '%!{\"IPProtocol\": \"tcp\"}%')\n),\nip_protocol_tcp AS (\n    SELECT\n        name\n    FROM\n        gcp.gcp_compute_firewall,\n        jsonb_array_elements(allowed) AS p,\n        jsonb_array_elements_text(p -> 'ports') AS port\n    WHERE\n        direction = 'INGRESS'\n        AND project_id=projectId\n        AND cd_snapshot_version=snapshotVersion\n        AND action = 'Allow'\n        AND source_ranges ?& array['0.0.0.0/0']\n        AND p ->> 'IPProtocol' = 'tcp'\n        AND (\n            port = '22'\n            OR (\n                port LIKE '%-%'\n                AND split_part(port, '-', 1)::integer <= 22\n                AND split_part(port, '-', 2)::integer >= 22\n            )\n        )\n)\nSELECT\n    self_link AS resource,\n    CASE\n        WHEN name IN (SELECT name FROM ip_protocol_tcp) THEN 'alarm'\n        WHEN name IN (SELECT name FROM ip_protocol_all) THEN 'alarm'\n        ELSE 'ok'\n    END AS status,\n    CASE\n        WHEN name IN (SELECT name FROM ip_protocol_tcp) OR name IN (SELECT name FROM ip_protocol_all)\n            THEN title || ' allows SSH access from internet.'\n        ELSE title || ' restricts SSH access from internet.'\n    END AS reason,\n    location AS region,\n    project\nFROM\n    gcp.gcp_compute_firewall\nWHERE\n    project_id=projectId\n    AND cd_snapshot_version=snapshotVersion;",
   "title": "3.6 Ensure That SSH Access Is Restricted From the Internet",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    304228000
+    23,
+    10,
+    15,
+    29,
+    726822000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_3_6"
 }

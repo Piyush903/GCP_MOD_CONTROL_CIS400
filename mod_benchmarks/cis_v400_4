@@ -1,5 +1,5 @@
 {
-  "index": "b0ef5991-1ea9-47ed-832d-f4b2ecc62e4f",
+  "index": "b11bba24-7078-4dff-9cab-c9e5b8bc5595",
   "children": "{gcp_compliance.control.cis_v400_4_1,gcp_compliance.control.cis_v400_4_2,gcp_compliance.control.cis_v400_4_3,gcp_compliance.control.cis_v400_4_4,gcp_compliance.control.cis_v400_4_5,gcp_compliance.control.cis_v400_4_6,gcp_compliance.control.cis_v400_4_7,gcp_compliance.control.cis_v400_4_8,gcp_compliance.control.cis_v400_4_9,gcp_compliance.control.cis_v400_4_10,gcp_compliance.control.cis_v400_4_11,gcp_compliance.control.cis_v400_4_12}",
   "description": "It is recommended to configure your instance to not use the default Compute Engine service account because it has the Editor role on the project.",
   "modName": "gcp_compliance",

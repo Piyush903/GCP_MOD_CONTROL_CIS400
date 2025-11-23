@@ -1,10 +1,10 @@
 {
-  "index": "06d40fb9-d3fc-4e44-b805-4fa82a343d7d",
+  "index": "21ea2fbe-80ef-4841-9c2a-3e913c2f453d",
   "description": "It is recommended that the IAM policy on Cloud KMS `cryptokeys` should restrict anonymous and/or public access.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_9",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "with public_keys as (\n  select\n    distinct self_link\n  from\n    gcp.gcp_kms_key,\n    jsonb_array_elements(iam_policy -> 'bindings') as b\n  where\n    b -> 'members' ?| array['allAuthenticatedUsers', 'allUsers']\n        and project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n)\nselect\n  k.self_link as resource,\n  case\n    when p.self_link is null then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when p.self_link is null then title || ' in ' || k.key_ring_name || ' key ring not publicly accessible.'\n    else title || ' in ' || k.key_ring_name || ' key ring publicly accessible.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_kms_key k\nleft join public_keys p on k.self_link = p.self_link\n        where k.project_id=projectId\n        and k.cd_snapshot_version=snapshotVersion;",
   "title": "1.9 Ensure That Cloud KMS Cryptokeys Are Not Anonymously or Publicly Accessible",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    295791000
+    23,
+    10,
+    15,
+    29,
+    720837000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_1_9"
 }

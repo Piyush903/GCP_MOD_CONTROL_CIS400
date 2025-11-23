@@ -1,5 +1,5 @@
 {
-  "index": "be1af3ea-574d-40c9-8850-b2e1ec116a0b",
+  "index": "045e3033-c0f3-4a05-908f-1525ca735642",
   "children": "{gcp_compliance.control.cis_v400_1_1,gcp_compliance.control.cis_v400_1_2,gcp_compliance.control.cis_v400_1_3,gcp_compliance.control.cis_v400_1_4,gcp_compliance.control.cis_v400_1_5,gcp_compliance.control.cis_v400_1_6,gcp_compliance.control.cis_v400_1_7,gcp_compliance.control.cis_v400_1_8,gcp_compliance.control.cis_v400_1_9,gcp_compliance.control.cis_v400_1_10,gcp_compliance.control.cis_v400_1_11,gcp_compliance.control.cis_v400_1_12,gcp_compliance.control.cis_v400_1_13,gcp_compliance.control.cis_v400_1_14,gcp_compliance.control.cis_v400_1_15,gcp_compliance.control.cis_v400_1_16,gcp_compliance.control.cis_v400_1_17}",
   "description": "Use corporate login credentials instead of consumer accounts, such as Gmail accounts.",
   "modName": "gcp_compliance",

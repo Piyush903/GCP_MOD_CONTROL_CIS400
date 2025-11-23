@@ -1,10 +1,10 @@
 {
-  "index": "8cd6e78c-9535-478a-aac1-7d9f74bfd317",
+  "index": "6df96d8d-e9d7-4ef0-8c32-74274fe82f78",
   "description": "It is recommended to set `skip_show_database` database flag for Cloud SQL Mysql instance to `on`.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_1_2",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'MYSQL%' then 'skip'\n    when database_flags @> '[{\"name\":\"skip_show_database\",\"value\":\"on\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'MYSQL%'\n      then title || ' not a MySQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"skip_show_database\"}]')\n      then title || ' ''skip_show_database'' database flag not set.'\n    when database_flags @> '[{\"name\":\"skip_show_database\",\"value\":\"on\"}]'\n      then title || ' ''skip_show_database'' database flag set to ''on''.'\n    else title || ' ''skip_show_database'' database flag set to ''off''.'\n  end as reason\n    \n    , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.1.2 Ensure 'Skip_show_database' Database Flag for Cloud SQL MySQL Instance Is Set to 'On'",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    297933000
+    23,
+    10,
+    15,
+    29,
+    723770000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_1_2"
 }

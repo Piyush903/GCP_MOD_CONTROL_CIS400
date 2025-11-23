@@ -1,10 +1,10 @@
 {
-  "index": "8f4e1d5f-eb84-4f5d-b78a-e6dd0b582b0a",
+  "index": "098366ec-dd74-4dd0-90af-daab8220d672",
   "description": "It is recommended to check the `user connections` for a Cloud SQL SQL Server instance to ensure that it is not artificially limiting connections.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_3",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'SQLSERVER%' then 'skip'\n    when database_flags @> '[{\"name\":\"user connections\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'SQLSERVER%'\n      then title || ' not a SQL Server database.'\n    when database_flags @> '[{\"name\":\"user connections\"}]'\n      then title || ' ''user connections'' database flag set.'\n    else title || ' ''user connections'' database flag not set.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.3.3 Ensure 'user Connections' Database Flag for Cloud SQL SQL Server Instance Is Set to a Non-limiting Value",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    298027000
+    23,
+    10,
+    15,
+    29,
+    723842000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_3_3"
 }

@@ -1,10 +1,10 @@
 {
-  "index": "6257d4d6-2383-4980-be93-721e7980da4c",
+  "index": "e064cc1a-d142-4599-bcc2-7c21d550677e",
   "description": "A contained database includes all database settings and metadata required to define the database and has no configuration dependencies on the instance of the Database Engine where the database is installed. Users can connect to the database without authenticating a login at the Database Engine level. Isolating the database from the Database Engine makes it possible to easily move the database to another instance of SQL Server. Contained databases have some unique threats that should be understood and mitigated by SQL Server Database Engine administrators. Most of the threats are related to the USER WITH PASSWORD authentication process, which moves the authentication boundary from the Database Engine level to the database level, hence this is recommended not to enable this flag. This recommendation is applicable to SQL Server database instances.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_7",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'SQLSERVER%' then 'skip'\n    when database_flags @> '[{\"name\":\"contained database authentication\",\"value\":\"off\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'SQLSERVER%'\n      then title || ' not a SQL Server database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"contained database authentication\"}]')\n      then title || ' ''contained database authentication'' not set.'\n    when database_flags @> '[{\"name\":\"contained database authentication\",\"value\":\"off\"}]'\n      then title || ' ''contained database authentication'' database flag set to ''off''.'\n    else title || ' ''contained database authentication'' database flag set to ''on''.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_sql_database_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "6.3.7 Ensure 'contained database authentication' Database Flag for Cloud SQL SQL Server Instance Is Set to 'off'",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    298065000
+    23,
+    10,
+    15,
+    29,
+    723867000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_3_7"
 }

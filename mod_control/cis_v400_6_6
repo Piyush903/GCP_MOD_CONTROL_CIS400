@@ -1,10 +1,10 @@
 {
-  "index": "632ed3c5-0a42-4d96-a130-c866c6230eda",
+  "index": "4ffefe51-ee53-4ac4-8742-0a70270655c9",
   "description": "It is recommended to configure Second Generation Sql instance to use private IPs instead of public IPs.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_6",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when ip_addresses @> '[{\"type\": \"PRIMARY\"}]' and backend_type = 'SECOND_GEN' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when ip_addresses @> '[{\"type\": \"PRIMARY\"}]' and backend_type = 'SECOND_GEN'\n      then title || ' associated with public IPs.'\n    else title || ' not associated with public IPs.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_sql_database_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "6.6 Ensure That Cloud SQL Database Instances Do Not Have Public IPs",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    298094000
+    23,
+    10,
+    15,
+    29,
+    723889000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_6"
 }

@@ -9,7 +9,7 @@
   "path": null,
   "qualifiedName": null,
   "query": "gcp_compliance.query.compute_https_load_balancer_logging_enabled",
-  "controlLevel": "master",
+  "controlLevel": "cis_v400_2_16",
   "createdAt": [
     2023,
     7,
@@ -21,5 +21,6 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type": "HTTPS Load Balancers"
+  "type": "HTTPS Load Balancers",
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v200_2_16"
 }

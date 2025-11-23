@@ -1,10 +1,10 @@
 {
-  "index": "ae646b5e-f5e3-4340-9826-3aac7c57ab04",
+  "index": "46b5f87c-1a8b-4147-867c-6d940aa7f845",
   "description": "API Keys should only be used for services in cases where other authentication methods are unavailable. In this case, unrestricted keys are insecure because they can be viewed publicly, such as from within a browser, or they can be accessed on a device where the key resides. It is recommended to restrict API key usage to trusted hosts, HTTP referrers and apps. It is recommended to use the more secure standard authentication flow instead.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_13",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select   'https://iam.googleapis.com/v1/projects/' || project || '/apikeys/' || name as resource,   case     when restrictions -> 'serverKeyRestrictions' is null       and restrictions -> 'browserKeyRestrictions' is null       and restrictions -> 'androidKeyRestrictions' is null       and restrictions -> 'iosKeyRestrictions' is null then 'alarm'     when restrictions -> 'serverKeyRestrictions' @> any( array[     '{\\",
   "title": "1.13 Ensure API Keys Are Restricted To Use by Only Specified Hosts and Apps",
   "path": null,
   "qualifiedName": null,
@@ -13,11 +13,11 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    295838000
+    23,
+    10,
+    15,
+    29,
+    720883000
   ],
   "remediationAvailable": false,
   "anonymous": false,

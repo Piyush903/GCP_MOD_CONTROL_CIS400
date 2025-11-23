@@ -1,10 +1,10 @@
 {
-  "index": "07c43614-63e5-43bc-adf7-7c97cf05a441",
+  "index": "b3c19a06-3c94-4ffa-893a-6e4872a59920",
   "description": "The `log_min_error_statement` flag defines the minimum message severity level that are considered as an error statement.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_2_6",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'POSTGRES%' then 'skip'\n    when database_flags @> '[{\"name\":\"log_min_error_statement\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'POSTGRES%'\n      then title || ' not a PostgreSQL database.'\n    when database_flags @> '[{\"name\":\"log_min_error_statement\"}]'\n      then title || ' ''log_min_error_statement'' database flag set.'\n    else title || ' ''log_min_error_statement'' database flag not set.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.2.6 Ensure 'Log_min_error_statement' Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'Error' or Stricter",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    297988000
+    23,
+    10,
+    15,
+    29,
+    723813000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_2_6"
 }

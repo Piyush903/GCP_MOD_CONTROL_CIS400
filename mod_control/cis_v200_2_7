@@ -9,7 +9,7 @@
   "path": null,
   "qualifiedName": null,
   "query": "gcp_compliance.query.logging_metric_alert_firewall_rule_changes",
-  "controlLevel": "master",
+  "controlLevel": "cis_v400_2_7",
   "createdAt": [
     2023,
     7,
@@ -21,5 +21,6 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type": "Project"
+  "type": "Project",
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v200_2_7"
 }

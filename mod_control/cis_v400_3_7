@@ -1,10 +1,10 @@
 {
-  "index": "ab6d35e4-e0c9-4069-a6f4-08905a2c0af1",
+  "index": "8b12ca6c-4f0c-40ce-a95c-e65ed6cb1070",
   "description": "GCP `Firewall Rules` are specific to a `VPC Network`. Each rule either allows or denies traffic when its conditions are met. Its conditions allow users to specify the type of traffic, such as ports and protocols, and the source or destination of the traffic, including IP addresses, subnets, and instances.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_7",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "WITH ip_protocol_all AS (\n    SELECT\n        name\n    FROM\n        gcp.gcp_compute_firewall\n    WHERE\n        direction = 'INGRESS'\n        AND project_id=projectId\n        AND cd_snapshot_version=snapshotVersion\n        AND action = 'Allow'\n        AND source_ranges ?& array['0.0.0.0/0']\n        AND (allowed @> '[{\"IPProtocol\":\"all\"}]' OR allowed::text LIKE '%{\"IPProtocol\":\"tcp\"}%' OR allowed::text LIKE '%{\"IPProtocol\":\"udp\"}%')\n),\nip_protocol_rdp AS (\n    SELECT\n        name\n    FROM\n        gcp.gcp_compute_firewall,\n        jsonb_array_elements(allowed) AS p,\n        jsonb_array_elements_text(p -> 'ports') AS port\n    WHERE\n        direction = 'INGRESS'\n        AND project_id=projectId\n        AND cd_snapshot_version=snapshotVersion\n        AND action = 'Allow'\n        AND source_ranges ?& array['0.0.0.0/0']\n        AND p ->> 'IPProtocol' = 'tcp'\n        AND (\n            port = '3389'\n            OR (\n                port LIKE '%-%'\n                AND split_part(port, '-', 1)::integer <= 3389\n                AND split_part(port, '-', 2)::integer >= 3389\n            )\n        )\n)\nSELECT\n    self_link AS resource,\n    CASE\n        WHEN name IN (SELECT name FROM ip_protocol_rdp) THEN 'alarm'\n        WHEN name IN (SELECT name FROM ip_protocol_all) THEN 'alarm'\n        ELSE 'ok'\n    END AS status,\n    CASE\n        WHEN name IN (SELECT name FROM ip_protocol_rdp)\n            THEN 'Firewall rule allows connections from all IP addresses on TCP or UDP port 3389.'\n        WHEN name IN (SELECT name FROM ip_protocol_all)\n            THEN 'Firewall rule allows connections from all IP addresses on TCP or UDP port 3389 within the range 0-65535.'\n        ELSE 'Firewall rule does not allow connections from all IP addresses on TCP or UDP port 3389.'\n    END AS reason,\n    location AS location,\n    project AS project\nFROM\n    gcp.gcp_compute_firewall\nWHERE\n    project_id=projectId\n    AND cd_snapshot_version=snapshotVersion;",
   "title": "3.7 Ensure That RDP Access Is Restricted From the Internet",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    304249000
+    23,
+    10,
+    15,
+    29,
+    726829000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_3_7"
 }

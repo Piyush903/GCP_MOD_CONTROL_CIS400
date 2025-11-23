@@ -1,10 +1,10 @@
 {
-  "index": "73afa6e1-b44f-40ab-859e-ac7885f31145",
+  "index": "9ad5dbad-671e-4437-ad44-ce612195e471",
   "description": "Interacting with a serial port is often referred to as the serial console, which is similar to using a terminal window, in that input and output is entirely in text mode and there is no graphical interface or mouse support.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_5",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when metadata -> 'items' @> '[{\"key\": \"serial-port-enable\", \"value\": \"true\"}]' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when metadata -> 'items' @> '[{\"key\": \"serial-port-enable\", \"value\": \"true\"}]'\n      then title || ' serial port connections enabled.'\n    else title || ' serial port connections disabled.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "4.5 Ensure 'Enable Connecting to Serial Ports' Is Not Enabled for VM Instance",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    301993000
+    23,
+    10,
+    15,
+    29,
+    725523000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_4_5"
 }

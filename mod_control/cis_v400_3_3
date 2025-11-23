@@ -1,10 +1,10 @@
 {
-  "index": "9374f6d3-a59c-4111-8739-a3272b1a0554",
+  "index": "6c95b6f6-70be-4b90-8bdd-997ee0f8e79a",
   "description": "Cloud Domain Name System (DNS) is a fast, reliable and cost-effective domain name system that powers millions of domains on the internet. Domain Name System Security Extensions (DNSSEC) in Cloud DNS enables domain owners to take easy steps to protect their domains against DNS hijacking and man-in-the-middle and other attacks.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_3",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when visibility = 'private' then 'skip'\n    when visibility = 'public' and (dnssec_config_state is null or dnssec_config_state = 'off') then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when visibility = 'private'\n      then title || ' is private.'\n    when visibility = 'public' and (dnssec_config_state is null or dnssec_config_state = 'off')\n      then title || ' DNSSEC not enabled.'\n    else title || ' DNSSEC enabled.'\n  end as reason,\n  location as location,\n  project as project\nfrom\n  gcp.gcp_dns_managed_zone\nwhere project_id = projectId\n  and cd_snapshot_version = snapshotVersion;",
   "title": "3.3 Ensure That DNSSEC Is Enabled for Cloud DNS",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    304157000
+    23,
+    10,
+    15,
+    29,
+    726799000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_3_3"
 }

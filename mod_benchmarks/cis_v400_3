@@ -1,5 +1,5 @@
 {
-  "index": "d5560bc4-b4be-4489-81c3-11c9ca2404ef",
+  "index": "52035d33-45c6-4287-8c14-12f4eaaf4217",
   "children": "{gcp_compliance.control.cis_v400_3_1,gcp_compliance.control.cis_v400_3_2,gcp_compliance.control.cis_v400_3_3,gcp_compliance.control.cis_v400_3_4,gcp_compliance.control.cis_v400_3_5,gcp_compliance.control.cis_v400_3_6,gcp_compliance.control.cis_v400_3_7,gcp_compliance.control.cis_v400_3_8,gcp_compliance.control.cis_v400_3_9,gcp_compliance.control.cis_v400_3_10}",
   "description": "To prevent use of `default` network, a project should not have a `default` network.",
   "modName": "gcp_compliance",

@@ -1,10 +1,10 @@
 {
-  "index": "0eba2f5e-371b-443b-aeaa-39953037e387",
+  "index": "3f74c161-a706-4e81-9e16-7c4ebf876257",
   "description": "It is recommended that the principle of 'Separation of Duties' is enforced while assigning service-account related roles to users.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_8",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "with users_with_roles as (\n  select\n    distinct split_part(member_entity, ':', 2) as user_name,\n    project,\n    location,\n    p ->> 'role' as assigned_role\n  from\n    gcp.gcp_iam_policy,\n    jsonb_array_elements(bindings) as p,\n    jsonb_array_elements_text(p -> 'members') as member_entity\n  where\n    split_part(member_entity, ':', 1) = 'user'\n  and project_id=projectId\n  and cd_snapshot_version=snapshotVersion\n),\naccount_admin_users as(\n  select\n    user_name,\n    project,\n    location\n  from\n    users_with_roles\n  where assigned_role = 'roles/iam.serviceAccountAdmin'\n),\naccount_users as(\n  select\n    user_name,\n    project,\n    location\n  from\n    users_with_roles\n  where assigned_role = 'roles/iam.serviceAccountUser'\n)\nselect\n  distinct user_name as resource,\n  case\n    when user_name in (select user_name from account_users) and user_name in (select user_name from account_admin_users) then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when user_name in (select user_name from account_users) and user_name in (select user_name from account_admin_users)\n      then  user_name || ' assigned with both Service Account Admin and Service Account User roles.'\n    else user_name || ' not assigned with both Service Account Admin and Service Account User roles.'\n  end as reason\n  , location as location, project as project\nfrom\n  users_with_roles;",
   "title": "1.8 Ensure That Separation of Duties Is Enforced While Assigning Service Account Related Roles to Users",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    295780000
+    23,
+    10,
+    15,
+    29,
+    720826000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_1_8"
 }

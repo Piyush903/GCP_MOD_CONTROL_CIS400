@@ -9,7 +9,7 @@
   "path": null,
   "qualifiedName": null,
   "query": "gcp_compliance.query.audit_logging_configured_for_all_service",
-  "controlLevel": "master",
+  "controlLevel": "cis_v400_2_1",
   "createdAt": [
     2023,
     7,
@@ -21,5 +21,6 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type":"Audit Policy"
+  "type": "Audit Policy",
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v200_2_1"
 }

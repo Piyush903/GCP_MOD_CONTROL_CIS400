@@ -1,10 +1,10 @@
 {
-  "index": "be46b492-bdb7-4817-9ae2-4bd9e0339be6",
+  "index": "43d006a1-ab8e-4dba-b53a-b1f1ba73732a",
   "description": "Cloud DNS logging records the queries from the name servers within your VPC to Stackdriver. Logged queries can come from Compute Engine VMs, GKE containers, or other GCP resources provisioned within the VPC.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_12",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "with associated_networks as (\n  select\n    split_part(network ->> 'networkUrl', 'networks/', 2) network_name,\n    enable_logging\n  from\n    gcp.gcp_dns_policy,\n    jsonb_array_elements(networks) network\n  where project_id=projectId\n  and cd_snapshot_version=snapshotVersion\n)\nselect\n  net.self_link resource,\n  case\n    when p.network_name is null then 'alarm'\n    when not p.enable_logging then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when p.network_name is null then net.title || ' not associated with DNS policy.'\n    when not p.enable_logging then net.title || ' associated with DNS policy with logging disabled.'\n    else net.title || ' associated with DNS policy with logging enabled.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_compute_network net\nleft join associated_networks p on net.name = p.network_name\nwhere net.project_id=projectId\nand net.cd_snapshot_version=snapshotVersion;",
   "title": "2.12 Ensure That Cloud DNS Logging Is Enabled for All VPC Networks",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    306107000
+    23,
+    10,
+    15,
+    29,
+    728453000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_2_12"
 }

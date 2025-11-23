@@ -1,5 +1,5 @@
 {
-  "index": "2f2b3b14-f529-47ad-be9b-91700d809fc4",
+  "index": "0c52a2af-f198-4740-be77-553106e31fa7",
   "children": "{gcp_compliance.control.cis_v400_5_1,gcp_compliance.control.cis_v400_5_2}",
   "description": "It is recommended that IAM policy on Cloud Storage bucket does not allows anonymous or public access.",
   "modName": "gcp_compliance",

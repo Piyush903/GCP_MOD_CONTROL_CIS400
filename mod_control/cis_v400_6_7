@@ -1,10 +1,10 @@
 {
-  "index": "886c79f0-05fe-416a-ae8c-72e66f1445d7",
+  "index": "6b2b7ff7-c51d-41f2-a4f1-7e285da04674",
   "description": "It is recommended to have all SQL database instances set to enable automated backups.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_7",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when backup_enabled then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when backup_enabled\n      then title || ' automatic backups configured.'\n    else title || ' automatic backups not configured.'\n  end as reason,\n  location as location,\n  project as project\nfrom\n  gcp.gcp_sql_database_instance\nwhere project_id = projectId\n  and cd_snapshot_version = snapshotVersion;",
   "title": "6.7 Ensure That Cloud SQL Database Instances Are Configured With Automated Backups",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    298102000
+    23,
+    10,
+    15,
+    29,
+    723895000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_7"
 }

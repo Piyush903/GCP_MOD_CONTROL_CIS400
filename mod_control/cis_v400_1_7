@@ -1,10 +1,10 @@
 {
-  "index": "f0cc9821-57f2-4837-8544-75cf19c654bd",
+  "index": "f5cd9482-8998-437c-92eb-bbad2446bce5",
   "description": "Service Account keys consist of a key ID (Private_key_Id) and Private key, which are used to sign programmatic requests users make to Google cloud services accessible to that particular service account. It is recommended that all Service Account keys are regularly rotated.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_7",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  'https://iam.googleapis.com/v1/projects/' || project || '/serviceAccounts/' || service_account_name || '/keys/' || name as resource,\n  case\n    when valid_after_time <= (current_date - interval '90' day) then 'alarm'\n    else 'ok'\n  end as status,\n  service_account_name || ' ' || name || ' created ' || to_char(valid_after_time , 'DD-Mon-YYYY') ||\n    ' (' || extract(day from current_timestamp - valid_after_time) || ' days).'\n  as reason\n  , location as location, project as project\nfrom\ngcp.gcp_service_account_key\nwhere\n  key_type = 'USER_MANAGED'\nand project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "1.7 Ensure User-Managed/External Keys for Service Accounts Are Rotated Every 90 Days or Fewer",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    295765000
+    23,
+    10,
+    15,
+    29,
+    720813000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_1_7"
 }

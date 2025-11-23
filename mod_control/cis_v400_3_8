@@ -1,10 +1,10 @@
 {
-  "index": "3939c823-f6e7-4682-829b-5f99880fcb08",
+  "index": "89c30037-9447-4fef-a146-abc116ca48b2",
   "description": "Flow Logs is a feature that enables users to capture information about the IP traffic going to and from network interfaces in the organization's VPC Subnets. Once a flow log is created, the user can view and retrieve its data in Stackdriver Logging. It is recommended that Flow Logs be enabled for every business-critical VPC subnet.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_8",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when enable_flow_logs then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when enable_flow_logs\n      then title || ' flow logging enabled.'\n    else title || ' flow logging disabled.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_compute_subnetwork\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "3.8 Ensure that VPC Flow Logs is Enabled for Every Subnet in a VPC Network",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    304272000
+    23,
+    10,
+    15,
+    29,
+    726837000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_3_8"
 }

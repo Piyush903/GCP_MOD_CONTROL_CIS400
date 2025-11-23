@@ -1,10 +1,10 @@
 {
-  "index": "a99191e9-ed21-4847-9418-c330229fc3c5",
+  "index": "fdd5d1ca-e80c-4e5a-bae5-8f8e817dd9bf",
   "description": "Enabling OS login binds SSH certificates to IAM users and facilitates effective SSH certificate management.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_4",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  i.self_link resource,\n  case\n    when m.common_instance_metadata -> 'items' is null or not (m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\"}]') then 'alarm'\n    when m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"FALSE\"}]' then 'alarm'\n    when m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"TRUE\"}]' and i.metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"FALSE\"}]' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when\n      m.common_instance_metadata -> 'items' is null\n      or not(m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\"}]')\n      or m.common_instance_metadata -> 'items' @> '[{\"key\": \"enable-oslogin\", \"value\": \"FALSE\"}]'\n      then i.title || ' has OS login disabled at project level.'\n    when m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"TRUE\"}]' and i.metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"FALSE\"}]'\n      then i.title || ' OS login settings is disabled.'\n    when m.common_instance_metadata -> 'items' @> '[{\"key\":\"enable-oslogin\",\"value\":\"TRUE\"}]' and i.metadata -> 'items' is null\n      then i.title || ' inherits OS login settings from project level.'\n    else i.title || ' OS login enabled.'\n  end as reason\n  \n  , i.location as location, i.project as project\nfrom\n  gcp.gcp_compute_instance i\n  left join gcp.gcp_compute_project_metadata m on i.project = m.project\nwhere i.project_id=projectId\nand i.cd_snapshot_version=snapshotVersion\nand m.project_id=projectId\nand m.cd_snapshot_version=snapshotVersion;",
   "title": "4.4 Ensure Oslogin Is Enabled for a Project",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    301974000
+    23,
+    10,
+    15,
+    29,
+    725517000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_4_4"
 }

@@ -1,10 +1,10 @@
 {
-  "index": "8ff5c6f4-4ad7-47a9-8ef6-56784014588b",
+  "index": "70aa9955-ce1e-4d0b-b1c4-19f8b456e838",
   "description": "To support principle of least privileges and prevent potential privilege escalation it is recommended that instances are not assigned to default service account `Compute Engine default service account` with Scope `Allow full access to all Cloud APIs`.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_2",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'\n    when account ->> 'email' like '%-compute@developer.gserviceaccount.com' and account -> 'scopes' ? 'https://www.googleapis.com/auth/cloud-platform' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node'\n      then title || ' created by GKE.'\n    when account ->> 'email' like '%-compute@developer.gserviceaccount.com' and account -> 'scopes' ? 'https://www.googleapis.com/auth/cloud-platform'\n      then title || ' configured with default service account with full access.'\n    else title || ' not configured with default service account with full access.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance,\n  jsonb_array_elements(service_accounts) account\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "4.2 Ensure That Instances Are Not Configured To Use the Default Service Account With Full Access to All Cloud APIs",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    301901000
+    23,
+    10,
+    15,
+    29,
+    725489000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_4_2"
 }

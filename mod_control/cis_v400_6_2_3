@@ -1,10 +1,10 @@
 {
-  "index": "ba30d7b8-c62c-467f-8b0d-44575e8bd5ce",
+  "index": "01ba8926-cfa3-4f85-8ec5-253037cb0bdd",
   "description": "Enabling the `log_disconnections` setting logs the end of each session, including the session duration.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_2_3",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'POSTGRES%' then 'skip'\n    when database_flags @> '[{\"name\":\"log_disconnections\",\"value\":\"on\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'POSTGRES%'\n      then title || ' not a PostgreSQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"log_disconnections\"}]')\n      then title || ' ''log_disconnections'' database flag not set.'\n    when database_flags @> '[{\"name\":\"log_disconnections\",\"value\":\"on\"}]'\n      then title || ' ''log_disconnections'' database flag set to ''on''.'\n    else title || ' ''log_disconnections'' database flag set to ''off''.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.2.3 Ensure That the 'Log_disconnections' Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'On'",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    297963000
+    23,
+    10,
+    15,
+    29,
+    723795000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_2_3"
 }

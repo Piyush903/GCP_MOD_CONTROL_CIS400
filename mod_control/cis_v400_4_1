@@ -1,10 +1,10 @@
 {
-  "index": "75078d00-2694-4270-a7d8-cfb74ed46171",
+  "index": "366ec63d-d31f-4641-81e0-98709ab2609a",
   "description": "It is recommended to configure your instance to not use the default Compute Engine service account because it has the Editor role on the project.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_1",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'\n    when account ->> 'email' like '%-compute@developer.gserviceaccount.com' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node'\n      then title || ' created by GKE.'\n    when account ->> 'email' like '%-compute@developer.gserviceaccount.com'\n      then title || ' configured to use default service account.'\n    else title || ' not configured with default service account.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance,\n  jsonb_array_elements(service_accounts) account\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "4.1 Ensure That Instances Are Not Configured To Use the Default Service Account",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    301864000
+    23,
+    10,
+    15,
+    29,
+    725476000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_4_1"
 }

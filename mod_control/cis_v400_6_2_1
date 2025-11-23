@@ -1,10 +1,10 @@
 {
-  "index": "d82182c1-98ad-4db5-be48-eafe9429ff56",
+  "index": "7075cc71-7d7e-4e71-ba3e-10a6739f69a3",
   "description": "The `log_error_verbosity` flag controls the verbosity/details of messages logged. Valid values are: 'TERSE', 'DEFAULT', and 'VERBOSE'.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_2_1",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'POSTGRES%' then 'skip'\n    when database_flags @> '[{\"name\":\"log_checkpoints\",\"value\":\"on\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'POSTGRES%'\n      then title || ' not a PostgreSQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"log_checkpoints\"}]')\n      then title || ' ''log_checkpoints'' database flag not set.'\n    when database_flags @> '[{\"name\":\"log_checkpoints\",\"value\":\"on\"}]'\n      then title || ' ''log_checkpoints'' database flag set to ''on''.'\n    else title || ' ''log_checkpoints'' database flag set to ''off''.'\n  end as reason\n    \n    , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.2.1 Ensure 'Log_error_verbosity' Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'DEFAULT' or Stricter",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    297949000
+    23,
+    10,
+    15,
+    29,
+    723783000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_2_1"
 }

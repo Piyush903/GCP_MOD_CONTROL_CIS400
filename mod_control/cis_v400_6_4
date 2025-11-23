@@ -1,10 +1,10 @@
 {
-  "index": "0f8a6bed-85fa-4fe1-b50a-9d04753f9403",
+  "index": "ebc02717-f61d-4b22-9f88-35a73b5091e8",
   "description": "It is recommended to enforce all incoming connections to SQL database instance to use SSL.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_4",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when ip_configuration -> 'requireSsl' is null then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when ip_configuration -> 'requireSsl' is null\n      then title || ' does not enforce SSL connections.'\n    else title || ' enforces SSL connections.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.4 Ensure That the Cloud SQL Database Instance Requires All Incoming Connections To Use SSL",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    298075000
+    23,
+    10,
+    15,
+    29,
+    723874000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_4"
 }

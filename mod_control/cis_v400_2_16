@@ -1,10 +1,10 @@
 {
-  "index": "7beb0b34-e5c9-4621-93f1-45ca61a4e4a7",
+  "index": "c207a679-9204-480b-8d8b-4ce7a11257b7",
   "description": "Logging enabled on a HTTPS Load Balancer will show all network traffic and its destination.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_16",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  m.self_link as resource,\n  case\n    when s.self_link is null then 'skip'\n    when s.log_config_enable then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when s.self_link is null then m.name || ' uses backend bucket.'\n    when s.log_config_enable then m.name || ' logging enabled.'\n    else m.name || ' logging disabled.'\n  end as reason\n  , m.location as location, m.project as project\nfrom\n  gcp.gcp_compute_url_map as m\n  left join gcp.gcp_compute_backend_service as s on s.self_link = m.default_service\nwhere m.project_id=projectId\nand m.cd_snapshot_version=snapshotVersion\nand s.project_id=projectId\nand s.cd_snapshot_version=snapshotVersion;",
   "title": "2.16 Ensure Logging is enabled for HTTP(S) Load Balancer",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    306185000
+    23,
+    10,
+    15,
+    29,
+    728523000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_2_16"
 }

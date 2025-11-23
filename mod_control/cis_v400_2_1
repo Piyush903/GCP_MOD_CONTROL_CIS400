@@ -1,10 +1,10 @@
 {
-  "index": "2a20d9c1-1669-4dc7-8cb3-d3f3e5542c2a",
+  "index": "c9270bb1-2b7e-4f8e-a128-47558cba0cc4",
   "description": "It is recommended that Cloud Audit Logging is configured to track all admin activities and read, write access to user data.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_1",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "with default_audit_configs as (\n  select\n    *\n  from\n    (\n      select\n        service,\n        string_agg(log ->> 'logType', ', ') as log_types,\n        string_agg(log ->> 'exemptedMembers', ', ') as exempted_user,\n        location,\n        project\n      from\n        gcp.gcp_audit_policy,\n        jsonb_array_elements(audit_log_configs) as log\n      where\n        project_id=projectId and cd_snapshot_version=snapshotVersion\n      group by\n        service, project, location\n    ) logs\n  where\n    log_types like '%DATA_WRITE%'\n    and log_types like '%DATA_READ%'\n    and log_types like '%ADMIN_READ%'\n    and service = 'allServices'\n)\nselect\n  default_audit_configs.service as resource,\n  case\n    when default_audit_configs.exempted_user is null then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when default_audit_configs.exempted_user is null\n      then 'Audit logging properly configured across all services and no exempted users associated.'\n    else 'Audit logging not configured as per CIS requirement or default audit setting having exempted user.'\n  end as reason,\n  default_audit_configs.location as location,\n  default_audit_configs.project as project\nfrom\n  default_audit_configs;",
   "title": "2.1 Ensure That Cloud Audit Logging Is Configured Properly",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    305877000
+    23,
+    10,
+    15,
+    29,
+    728233000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_2_1"
 }

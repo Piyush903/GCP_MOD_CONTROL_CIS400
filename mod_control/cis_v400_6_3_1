@@ -1,10 +1,10 @@
 {
-  "index": "98f63665-d2a5-45d4-865c-8821fa2cfc1b",
+  "index": "7056d847-3dd5-45dd-8dc8-dccf27b0da4b",
   "description": "It is recommended to set `external scripts enabled` database flag for Cloud SQL SQL Server instance to `off`.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_1",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'SQLSERVER%' then 'skip'\n    when database_flags @> '[{\"name\":\"external scripts enabled\",\"value\":\"off\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'SQLSERVER%'\n      then title || ' not a SQL Server database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"external scripts enabled\"}]')\n      then title || ' ''external scripts enabled'' not set.'\n    when database_flags @> '[{\"name\":\"external scripts enabled\",\"value\":\"off\"}]'\n      then title || ' ''external scripts enabled'' database flag set to ''off''.'\n    else title || ' ''external scripts enabled'' database flag set to ''on''.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.3.1 Ensure 'external scripts enabled' Database Flag for Cloud SQL SQL Server Instance Is Set to 'off'",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    298011000
+    23,
+    10,
+    15,
+    29,
+    723831000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_3_1"
 }

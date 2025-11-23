@@ -1,10 +1,10 @@
 {
-  "index": "943ed232-9a65-49c6-84fb-7792616e54f6",
+  "index": "be63557d-a397-4eb5-82cd-48f3421678cb",
   "description": "Database Server should accept connections only from trusted Network(s)/IP(s) and restrict access from public IP addresses.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_5",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link as resource,\n  case\n    when exists (\n      select 1\n      from jsonb_array_elements(ip_configuration -> 'authorizedNetworks') as authNet\n      where authNet ->> 'value' = '0.0.0.0/0' or authNet ->> 'value' = '::/0'\n    ) then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when exists (\n      select 1\n      from jsonb_array_elements(ip_configuration -> 'authorizedNetworks') as authNet\n      where authNet ->> 'value' = '0.0.0.0/0' or  authNet ->> 'value' = '::/0'\n    ) then title || ' is open to the internet.'\n    else title || ' is not open to the internet.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.5 Ensure That Cloud SQL Database Instances Do Not Implicitly Whitelist All Public IP Addresses",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    298087000
+    23,
+    10,
+    15,
+    29,
+    723883000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_5"
 }

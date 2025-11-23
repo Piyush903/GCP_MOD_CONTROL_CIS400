@@ -1,10 +1,10 @@
 {
-  "index": "dd892c2d-bac8-4000-9fc2-18e10257221b",
+  "index": "4a6cc431-9bb8-4a80-a146-4249151f19e7",
   "description": "In order to prevent use of legacy networks, a project should not have a legacy network configured. As of now, Legacy Networks are gradually being phased out, and you can no longer create projects with them. This recommendation is to check older projects to ensure that they are not using Legacy Networks.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_2",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when ipv4_range is not null then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when ipv4_range is not null\n      then title || ' is a legacy network.'\n    else title || ' not a legacy network.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_compute_network\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "3.2 Ensure Legacy Networks Do Not Exist for Older Projects",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    304128000
+    23,
+    10,
+    15,
+    29,
+    726789000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_3_2"
 }

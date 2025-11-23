@@ -1,10 +1,10 @@
 {
-  "index": "160a30da-f2ea-4e97-b974-6430825f340b",
+  "index": "971f3dd5-8873-4f8f-aea8-936855cb4bd7",
   "description": "It is recommended to create a sink that will export copies of all the log entries. This can help aggregate logs from multiple projects and export them to a Security Information and Event Management (SIEM).",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_2",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "with project_sink_count as (\n  select\n    project,\n    count(*) no_of_sink\n  from\n    gcp.gcp_logging_sink\n  where\n    filter = ''\n    and destination != ''\n        and project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n  group by\n    project\n)\nselect\n  'https://www.googleapis.com/logging/v2/projects/' || s.project resource,\n  case\n    when s.no_of_sink > 0 then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when s.no_of_sink > 0\n      then 'Sinks configured for all log entries.'\n    else 'Sinks not configured for all log entries.'\n  end as reason\n  \n  , p.project_id as project\nfrom\n  gcp.gcp_project p\n  left join project_sink_count s on s.project = p.project_id\nwhere p.project_id=projectId\nand p.cd_snapshot_version=snapshotVersion;",
   "title": "2.2 Ensure That Sinks Are Configured for All Log Entries",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    305904000
+    23,
+    10,
+    15,
+    29,
+    728262000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_2_2"
 }

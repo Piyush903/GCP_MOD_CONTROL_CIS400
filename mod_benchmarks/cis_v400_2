@@ -1,5 +1,5 @@
 {
-  "index": "a899c6b7-3ac9-4374-8481-a0cd0aaf211f",
+  "index": "87188b3a-c972-44ab-b0c6-7c15fee7a0c9",
   "children": "{gcp_compliance.control.cis_v400_2_1,gcp_compliance.control.cis_v400_2_2,gcp_compliance.control.cis_v400_2_3,gcp_compliance.control.cis_v400_2_4,gcp_compliance.control.cis_v400_2_5,gcp_compliance.control.cis_v400_2_6,gcp_compliance.control.cis_v400_2_7,gcp_compliance.control.cis_v400_2_8,gcp_compliance.control.cis_v400_2_9,gcp_compliance.control.cis_v400_2_10,gcp_compliance.control.cis_v400_2_11,gcp_compliance.control.cis_v400_2_12,gcp_compliance.control.cis_v400_2_13,gcp_compliance.control.cis_v400_2_14,gcp_compliance.control.cis_v400_2_15,gcp_compliance.control.cis_v400_2_16}",
   "description": "It is recommended that Cloud Audit Logging is configured to track all admin activities and read, write access to user data.",
   "modName": "gcp_compliance",

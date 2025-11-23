@@ -1,10 +1,10 @@
 {
-  "index": "0af90b77-e0b5-4810-8519-34704675d412",
+  "index": "00b4dc92-8bff-4357-b1d2-c5f43b531c8d",
   "description": "It is recommended that the IAM policy on BigQuery datasets does not allow anonymous and/or public access.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_7_1",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "SELECT\n  self_link AS resource,\n  CASE\n    WHEN access @> '[{\"specialGroup\": \"allAuthenticatedUsers\"}]' OR access @> '[{\"iamMember\": \"allUsers\"}]' THEN 'alarm'\n    ELSE 'ok'\n  END AS status,\n  CASE\n    WHEN access @> '[{\"specialGroup\": \"allAuthenticatedUsers\"}]' OR access @> '[{\"iamMember\": \"allUsers\"}]'\n      THEN title || ' publicly accessible.'\n    ELSE title || ' not anonymously or publicly accessible.'\n  END AS reason,\n  location AS location,\n  project AS project\nFROM\n  gcp.gcp_bigquery_dataset\nWHERE\n  project_id = projectId\n  AND cd_snapshot_version = snapshotVersion;",
   "title": "7.1 Ensure That BigQuery Datasets Are Not Anonymously or Publicly Accessible",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    300877000
+    23,
+    10,
+    15,
+    29,
+    724950000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_7_1"
 }

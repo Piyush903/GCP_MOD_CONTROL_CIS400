@@ -1,5 +1,5 @@
 {
-  "index": "5102a8cd-24fe-458e-94b5-2cb7a5842f01",
+  "index": "ec868492-c37f-460d-b2bc-bc2ee1c85a8a",
   "children": "{gcp_compliance.benchmark.cis_v400_6_1,gcp_compliance.benchmark.cis_v400_6_2,gcp_compliance.benchmark.cis_v400_6_3,gcp_compliance.control.cis_v400_6_4,gcp_compliance.control.cis_v400_6_5,gcp_compliance.control.cis_v400_6_6,gcp_compliance.control.cis_v400_6_7}",
   "description": "It is recommended to set a password for the administrative user (root by default) to prevent unauthorized access to the SQL database instances. This recommendation is applicable only for MySQL Instances. PostgreSQL does not offer any setting for No Password from the cloud console.",
   "modName": "gcp_compliance",

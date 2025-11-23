@@ -1,10 +1,10 @@
 {
-  "index": "25c83e08-8710-407b-85a3-dde19444db9d",
+  "index": "bb04bfbd-1e79-457a-92fd-32993c639314",
   "description": "Secure Sockets Layer (SSL) policies determine what port Transport Layer Security (TLS) features clients are permitted to use when connecting to load balancers.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_9",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "with all_proxies as (\n  select\n    name,\n    self_link,\n    split_part(kind, '#', 2) proxy_type,\n    ssl_policy,\n    title,\n    location,\n    project\n  from\n    gcp.gcp_compute_target_ssl_proxy\n        where project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n  union\n  select\n    name,\n    self_link,\n    split_part(kind, '#', 2) proxy_type,\n    ssl_policy,\n    title,\n    location,\n    project\n  from\n    gcp.gcp_compute_target_https_proxy\n        where project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n),\nssl_policy_without_weak_cipher as (\n  select\n    self_link\n  from\n    gcp.gcp_compute_ssl_policy\n  where\n    ((profile = 'MODERN' and min_tls_version = 'TLS_1_2')\n    or profile = 'RESTRICTED'\n    or (profile = 'CUSTOM' and not (enabled_features ?| array['TLS_RSA_WITH_AES_128_GCM_SHA256', 'TLS_RSA_WITH_AES_256_GCM_SHA384', 'TLS_RSA_WITH_AES_128_CBC_SHA', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_3DES_EDE_CBC_SHA'])))\n        and project_id=projectId\n        and cd_snapshot_version=snapshotVersion\n)\nselect\n  self_link resource,\n  case\n    when ssl_policy is null or ssl_policy in (select self_link from ssl_policy_without_weak_cipher) then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when ssl_policy is null\n      then proxy_type || ' ' || title || ' has no SSL policy.'\n    when ssl_policy is null or ssl_policy in (select self_link from ssl_policy_without_weak_cipher)\n      then proxy_type || ' ' || title || ' SSL policy contains CIS compliant cipher.'\n    else proxy_type || ' ' || title || ' SSL policy contains weak cipher.'\n  end as reason\n  , location as location, project as project\nfrom all_proxies;",
   "title": "3.9 Ensure No HTTPS or SSL Proxy Load Balancers Permit SSL Policies With Weak Cipher Suites",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    304328000
+    23,
+    10,
+    15,
+    29,
+    726853000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_3_9"
 }

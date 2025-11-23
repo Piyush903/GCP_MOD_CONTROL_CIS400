@@ -1,10 +1,10 @@
 {
-  "index": "6b5e9c38-d4af-4ece-876f-c7ba83c9a4f0",
+  "index": "128eee0f-ff31-4599-9f85-185591037970",
   "description": "Google Cloud encrypts data at-rest and in-transit, but customer data must be decrypted for processing. Confidential Computing is a breakthrough technology which encrypts data in-use\u2014while it is being processed. Confidential Computing environments keep data encrypted in memory and elsewhere outside the central processing unit (CPU).",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_11",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when confidential_instance_config @> '{\"enableConfidentialCompute\": true}' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when confidential_instance_config @> '{\"enableConfidentialCompute\": true}'\n      then title || ' confidential computing enabled.'\n    else title || ' confidential computing not enabled.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "4.11 Ensure That Compute Instances Have Confidential Computing Enabled",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    302141000
+    23,
+    10,
+    15,
+    29,
+    725576000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_4_11"
 }

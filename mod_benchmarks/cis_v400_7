@@ -1,5 +1,5 @@
 {
-  "index": "dea2367c-13c4-48d0-85b0-45f43b964f65",
+  "index": "8c87954f-e533-428a-a75c-e67c3129058b",
   "children": "{gcp_compliance.control.cis_v400_7_1,gcp_compliance.control.cis_v400_7_2,gcp_compliance.control.cis_v400_7_3,gcp_compliance.control.cis_v400_7_4}",
   "description": "It is recommended that the IAM policy on BigQuery datasets does not allow anonymous and/or public access.",
   "modName": "gcp_compliance",

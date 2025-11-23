@@ -1,10 +1,10 @@
 {
-  "index": "77d2acab-3261-49f6-9509-303324c513ca",
+  "index": "81d7e2f8-9668-4b7e-8054-15ea0a49c65c",
   "description": "User-managed service accounts should not have user-managed keys.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_4",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "with service_account_key as (\n  select\n    distinct service_account_name\n  from\n    gcp.gcp_service_account_key\n  where\n    key_type = 'USER_MANAGED'\n\tand project_id=projectId\n\tand cd_snapshot_version=snapshotVersion\n)\nselect\n  'https://iam.googleapis.com/v1/projects/' || project || '/serviceAccounts/' || name as resource,\n  case\n    when name like '%iam.gserviceaccount.com' and name in (select service_account_name from service_account_key) then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when name like '%iam.gserviceaccount.com' and name in (select service_account_name from service_account_key)\n      then title || ' has user-managed keys.'\n    else title || ' does not have user-managed keys.'\n  end as reason\n  , location as location, project as project\nfrom\n  gcp.gcp_service_account\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "1.4 Ensure That There Are Only GCP-Managed Service Account Keys for Each Service Account",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    295725000
+    23,
+    10,
+    15,
+    29,
+    720778000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_1_4"
 }

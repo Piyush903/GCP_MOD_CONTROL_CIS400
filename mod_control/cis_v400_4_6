@@ -1,10 +1,10 @@
 {
-  "index": "e94e24f0-1e40-4f06-9054-507c8cf18ee4",
+  "index": "564b5e41-c73d-4714-a047-34a9af39495f",
   "description": "Compute Engine instance cannot forward a packet unless the source IP address of the packet matches the IP address of the instance. Similarly, GCP won't deliver a packet whose destination IP address is different than the IP address of the instance receiving the packet. However, both capabilities are required if you want to use instances to help route packets.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_6",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'\n    when can_ip_forward then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node'\n      then title || ' created by GKE.'\n    when can_ip_forward\n      then title || ' IP forwarding enabled.'\n    else title || ' IP forwarding not enabled.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "4.6 Ensure That IP Forwarding Is Not Enabled on Instances",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    302018000
+    23,
+    10,
+    15,
+    29,
+    725533000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_4_6"
 }

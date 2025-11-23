@@ -1,10 +1,10 @@
 {
-  "index": "b8e05e61-1da7-4f70-b6dc-eecc6b57f138",
+  "index": "79a265e5-742d-42b2-ad5e-6310187f2e7d",
   "description": "It is recommended that IAM policy on Cloud Storage bucket does not allows anonymous or public access.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_5_1",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when iam_policy ->> 'bindings' like any (array ['%allAuthenticatedUsers%','%allUsers%']) then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when iam_policy ->> 'bindings' like any (array ['%allAuthenticatedUsers%','%allUsers%'])\n      then title || ' publicly accessible.'\n    else title || ' not publicly accessible.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n    gcp.gcp_storage_bucket\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "5.1 Ensure That Cloud Storage Bucket Is Not Anonymously or Publicly Accessible",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    295380000
+    23,
+    10,
+    15,
+    29,
+    720465000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_5_1"
 }

@@ -1,10 +1,10 @@
 {
-  "index": "e514b984-e43f-4815-bf78-030849541b19",
+  "index": "55c4b708-881b-428a-8c49-c1e0a74b6b85",
   "description": "It is recommended to use Instance specific SSH key(s) instead of using common/shared project-wide SSH key(s) to access Instances.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_3",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node' then 'skip'\n    when metadata -> 'items' @> '[{\"key\": \"block-project-ssh-keys\", \"value\": \"true\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when name like 'gke-%' and labels ? 'goog-gke-node'\n      then title || ' created by GKE.'\n    when metadata -> 'items' @> '[{\"key\": \"block-project-ssh-keys\", \"value\": \"true\"}]'\n      then title || ' has \"Block Project-wide SSH keys\" enabled.'\n    else title || ' has \"Block Project-wide SSH keys\" disabled.'\n  end as reason\n  \n  , location as location, project as project\nfrom\n  gcp.gcp_compute_instance\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "4.3 Ensure 'Block Project-Wide SSH Keys' Is Enabled for VM Instances",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    301926000
+    23,
+    10,
+    15,
+    29,
+    725497000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_4_3"
 }

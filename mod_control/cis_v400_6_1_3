@@ -1,10 +1,10 @@
 {
-  "index": "ff83896e-63e7-4eee-b49d-77ff6b291977",
+  "index": "7c73236d-fff5-430c-a7c9-1f6b8c7113e1",
   "description": "It is recommended to set the `local_infile` database flag for a Cloud SQL MySQL instance to `off`.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_1_3",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when database_version not like 'MYSQL%' then 'skip'\n    when database_flags @> '[{\"name\":\"local_infile\",\"value\":\"off\"}]' then 'ok'\n    else 'alarm'\n  end as status,\n  case\n    when database_version not like 'MYSQL%'\n      then title || ' not a MySQL database.'\n    when database_flags is null or not (database_flags @> '[{\"name\":\"local_infile\"}]')\n      then title || ' ''local_infile'' database flag not set.'\n    when database_flags @> '[{\"name\":\"local_infile\",\"value\":\"off\"}]'\n      then title || ' ''local_infile'' database flag set to ''off''.'\n    else title || ' ''local_infile'' database flag set to ''on''.'\n  end as reason\n    \n    , location as location, project as project\nfrom\n gcp.gcp_sql_database_instance where project_id = projectId   and cd_snapshot_version = snapshotVersion;",
   "title": "6.1.3 Ensure That the 'Local_infile' Database Flag for a Cloud SQL MySQL Instance Is Set to 'Off'",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    297941000
+    23,
+    10,
+    15,
+    29,
+    723777000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_6_1_3"
 }

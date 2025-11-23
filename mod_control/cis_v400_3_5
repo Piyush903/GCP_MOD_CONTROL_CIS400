@@ -1,10 +1,10 @@
 {
-  "index": "21941ca8-0d2a-4e2a-b48a-fb925965bd59",
+  "index": "96f80fa6-0f1e-4cb2-92d4-957a7ae0e354",
   "description": "DNSSEC algorithm numbers in this registry may be used in CERT RRs. Zone signing (DNSSEC) and transaction security mechanisms (SIG(0) and TSIG) make use of particular subsets of these algorithms. The algorithm used for key signing should be a recommended one and it should be strong.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_5",
-  "severity": "high",
-  "sql": "query \"manual_control\" {\n  sql = <<-EOQ\n    select\n      'https://cloudresourcemanager.googleapis.com/v1/projects/' || project_id resource,\n      'info' status,\n      'Manual verification required.' reason\n      ${local.common_dimensions_project_sql}\n    from\n      gcp_project;\n  EOQ\n}",
+  "severity": "medium",
+  "sql": "select\n  self_link resource,\n  case\n    when visibility = 'private' then 'skip'\n    when dnssec_config_state is null then 'alarm'\n    when dnssec_config_default_key_specs @> '[{\"keyType\": \"zoneSigning\", \"algorithm\": \"rsasha1\"}]' then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when visibility = 'private'\n      then title || ' is private.'\n    when dnssec_config_state is null\n      then title || ' DNSSEC not enabled.'\n    when dnssec_config_default_key_specs @> '[{\"keyType\": \"zoneSigning\", \"algorithm\": \"rsasha1\"}]'\n      then title || ' using RSASHA1 algorithm for zone-signing.'\n    else title || ' not using RSASHA1 algorithm for zone-signing.'\n  end as reason,\n  location as location,\n  project as project\nfrom\n  gcp.gcp_dns_managed_zone\nwhere project_id = projectId\n  and cd_snapshot_version = snapshotVersion;",
   "title": "3.5 Ensure That RSASHA1 Is Not Used for the Zone-Signing Key in Cloud DNS DNSSEC",
   "path": null,
   "qualifiedName": null,
@@ -13,14 +13,15 @@
   "createdAt": [
     2025,
     11,
-    14,
-    3,
-    5,
-    43,
-    304207000
+    23,
+    10,
+    15,
+    29,
+    726813000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_3_5"
 }
