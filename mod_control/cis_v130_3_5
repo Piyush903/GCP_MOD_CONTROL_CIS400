@@ -21,6 +21,5 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type": "DNS Managed Zone",
-  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v130_3_5"
+  "type": "DNS Managed Zone"
 }

@@ -21,6 +21,5 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type": "Compute Disk",
-  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v120_4_7"
+  "type": "Compute Disk"
 }
