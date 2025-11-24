@@ -1,5 +1,5 @@
 {
-  "index": "43d006a1-ab8e-4dba-b53a-b1f1ba73732a",
+  "index": "c8f8ada0-d2bd-4149-9f67-a00fc5fb5fa7",
   "description": "Cloud DNS logging records the queries from the name servers within your VPC to Stackdriver. Logged queries can come from Compute Engine VMs, GKE containers, or other GCP resources provisioned within the VPC.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_12",
@@ -8,16 +8,16 @@
   "title": "2.12 Ensure That Cloud DNS Logging Is Enabled for All VPC Networks",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_network_dns_logging_enabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    728453000
+    23,
+    55,
+    51,
+    712064000
   ],
   "remediationAvailable": false,
   "anonymous": false,

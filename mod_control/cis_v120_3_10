@@ -9,7 +9,7 @@
   "path": null,
   "qualifiedName": null,
   "query": "gcp_compliance.query.compute_firewall_allow_connections_proxied_by_iap",
-  "controlLevel": "cis_v400_3_10",
+  "controlLevel": "master",
   "createdAt": [
     2023,
     7,

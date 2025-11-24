@@ -1,5 +1,5 @@
 {
-  "index": "b6491ccb-8e02-41f8-b7cc-1a4ab1c427dd",
+  "index": "dea4239b-b9bb-49b2-afd5-844e471c35c2",
   "description": "A service account is a special Google account that belongs to an application or a VM, instead of to an individual end-user. The application uses the service account to call the service's Google API so that users aren't directly involved. It's recommended not to use admin access for ServiceAccount.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_5",
@@ -8,16 +8,16 @@
   "title": "1.5 Ensure That Service Account Has No Admin Privileges",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.iam_service_account_without_admin_privilege",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    720791000
+    23,
+    55,
+    51,
+    699580000
   ],
   "remediationAvailable": false,
   "anonymous": false,

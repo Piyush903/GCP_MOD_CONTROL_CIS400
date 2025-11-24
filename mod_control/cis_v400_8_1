@@ -1,26 +1,27 @@
 {
-  "index": "35963edc-6666-42a7-a9c8-9a58ee235548",
+  "index": "7aa34cb6-5d16-4bd7-9e29-ce739300b29c",
   "description": "When you use Dataproc, cluster and job data is stored on Persistent Disks (PDs) associated with the Compute Engine VMs in your cluster and in a Cloud Storage staging bucket. This PD and bucket data is encrypted using a Google-generated data encryption key (DEK) and key encryption key (KEK). The CMEK feature allows you to create, use, and revoke the key encryption key (KEK). Google still controls the data encryption key (DEK).",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_8_1",
-  "severity": "medium",
-  "sql": "select   cluster_name resource,   case     when config -> 'encryptionConfig' ->> 'gcePdKmsKeyName' is null then 'alarm'     else 'ok'   end as status,   case     when config -> 'encryptionConfig' ->> 'gcePdKmsKeyName' is null       then title || ' is not encrypted using customer-managed encryption keys (CMEK).'     else title || ' is encrypted using customer-managed encryption keys (CMEK).'   end as reason      , location as location, project as project from   gcp_dataproc_cluster;",
+  "severity": "low",
+  "sql": "select\n  cluster_name resource,\n  case\n    when config -> 'encryptionConfig' ->> 'gcePdKmsKeyName' is null then 'alarm'\n    else 'ok'\n  end as status,\n  case\n    when config -> 'encryptionConfig' ->> 'gcePdKmsKeyName' is null then title || ' is not encrypted using customer-managed encryption keys (CMEK).'\n    else title || ' is encrypted using customer-managed encryption keys (CMEK).'\n  end as reason,\n  location as location,\n  project as project\nfrom\n  gcp.gcp_dataproc_cluster\nwhere project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
   "title": "8.1 Ensure that Dataproc Cluster is encrypted using Customer-Managed Encryption Key",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.dataproc_cluster_encryption_with_cmek",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    725220000
+    23,
+    55,
+    51,
+    707714000
   ],
   "remediationAvailable": false,
   "anonymous": false,
   "type": "Project",
-  "isMaster": true
+  "isMaster": true,
+  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_8_1"
 }

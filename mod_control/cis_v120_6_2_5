@@ -9,7 +9,7 @@
   "path": null,
   "qualifiedName": null,
   "query": "gcp_compliance.query.sql_instance_postgresql_log_duration_database_flag_on",
-  "controlLevel": "cis_v400_6_2_5",
+  "controlLevel": "master",
   "createdAt": [
     2023,
     7,

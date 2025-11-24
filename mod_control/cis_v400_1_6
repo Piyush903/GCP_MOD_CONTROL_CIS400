@@ -1,5 +1,5 @@
 {
-  "index": "16a509d5-1ef5-41d1-a46f-1edd27862b63",
+  "index": "b37efa20-cd35-425d-b060-a9b0f5fe4ed8",
   "description": "It is recommended to assign the Service Account User (iam.serviceAccountUser) and Service Account Token Creator (iam.serviceAccountTokenCreator) roles to a user for a specific service account rather than assigning the role to a user at project level.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_6",
@@ -8,16 +8,16 @@
   "title": "1.6 Ensure That IAM Users Are Not Assigned the Service Account User or Service Account Token Creator Roles at Project Level",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.iam_user_not_assigned_service_account_user_role_project_level",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    720803000
+    23,
+    55,
+    51,
+    699606000
   ],
   "remediationAvailable": false,
   "anonymous": false,

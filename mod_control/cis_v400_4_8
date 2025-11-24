@@ -1,5 +1,5 @@
 {
-  "index": "f549a264-1bbf-4539-b6a1-b43668a33a57",
+  "index": "b01bdbc1-196f-475d-a7b9-05aebbd46f08",
   "description": "To defend against advanced threats and ensure that the boot loader and firmware on your VMs are signed and untampered, it is recommended that Compute instances are launched with Shielded VM enabled.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_8",
@@ -8,16 +8,16 @@
   "title": "4.8 Ensure Compute Instances Are Launched With Shielded VM Enabled",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_instance_shielded_vm_enabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    725549000
+    23,
+    55,
+    51,
+    708338000
   ],
   "remediationAvailable": false,
   "anonymous": false,

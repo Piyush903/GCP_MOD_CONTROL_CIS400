@@ -1,5 +1,5 @@
 {
-  "index": "6c95b6f6-70be-4b90-8bdd-997ee0f8e79a",
+  "index": "8e15746c-ec2d-4e49-b3bd-40a863eb40e9",
   "description": "Cloud Domain Name System (DNS) is a fast, reliable and cost-effective domain name system that powers millions of domains on the internet. Domain Name System Security Extensions (DNSSEC) in Cloud DNS enables domain owners to take easy steps to protect their domains against DNS hijacking and man-in-the-middle and other attacks.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_3",
@@ -8,16 +8,16 @@
   "title": "3.3 Ensure That DNSSEC Is Enabled for Cloud DNS",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.dns_managed_zone_dnssec_enabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    726799000
+    23,
+    55,
+    51,
+    709420000
   ],
   "remediationAvailable": false,
   "anonymous": false,

@@ -1,5 +1,5 @@
 {
-  "index": "e4a6d3ce-54dd-424a-b85e-18d7270c7a4c",
+  "index": "ed2ac6dd-8729-4a32-81ed-18f96c10d141",
   "description": "It is recommended that the principle of 'Separation of Duties' is enforced while assigning KMS related roles to users.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_11",
@@ -8,16 +8,16 @@
   "title": "1.11 Ensure That Separation of Duties Is Enforced While Assigning KMS Related Roles to Users",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.kms_key_separation_of_duties_enforced",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    720864000
+    23,
+    55,
+    51,
+    699939000
   ],
   "remediationAvailable": false,
   "anonymous": false,

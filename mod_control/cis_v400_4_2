@@ -1,5 +1,5 @@
 {
-  "index": "70aa9955-ce1e-4d0b-b1c4-19f8b456e838",
+  "index": "134f76bf-f42d-429f-9080-3e928420b6e8",
   "description": "To support principle of least privileges and prevent potential privilege escalation it is recommended that instances are not assigned to default service account `Compute Engine default service account` with Scope `Allow full access to all Cloud APIs`.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_2",
@@ -8,16 +8,16 @@
   "title": "4.2 Ensure That Instances Are Not Configured To Use the Default Service Account With Full Access to All Cloud APIs",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_instance_with_no_default_service_account_with_full_access",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    725489000
+    23,
+    55,
+    51,
+    708147000
   ],
   "remediationAvailable": false,
   "anonymous": false,

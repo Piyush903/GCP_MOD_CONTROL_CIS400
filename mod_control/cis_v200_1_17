@@ -9,7 +9,7 @@
   "path": null,
   "qualifiedName": null,
   "query": "gcp_compliance.query.dataproc_cluster_encryption_with_cmek",
-  "controlLevel": "cis_v400_1_17",
+  "controlLevel": "cis_v400_8_1",
   "createdAt": [
     2024,
     6,

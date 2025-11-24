@@ -1,5 +1,5 @@
 {
-  "index": "55c4b708-881b-428a-8c49-c1e0a74b6b85",
+  "index": "16f8e915-2adf-49a4-933d-d16a8dbb135c",
   "description": "It is recommended to use Instance specific SSH key(s) instead of using common/shared project-wide SSH key(s) to access Instances.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_3",
@@ -8,16 +8,16 @@
   "title": "4.3 Ensure 'Block Project-Wide SSH Keys' Is Enabled for VM Instances",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_instance_block_project_wide_ssh_enabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    725497000
+    23,
+    55,
+    51,
+    708165000
   ],
   "remediationAvailable": false,
   "anonymous": false,

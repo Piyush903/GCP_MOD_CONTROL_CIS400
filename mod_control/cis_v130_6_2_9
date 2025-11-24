@@ -9,7 +9,7 @@
   "path": null,
   "qualifiedName": null,
   "query": "gcp_compliance.query.sql_instance_postgresql_cloudsql_pgaudit_database_flag_enabled",
-  "controlLevel": "cis_v200_6_2_8",
+  "controlLevel": "cis_v400_6_2_8",
   "createdAt": [
     2023,
     7,

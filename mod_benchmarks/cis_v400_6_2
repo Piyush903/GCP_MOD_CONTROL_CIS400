@@ -4,7 +4,7 @@
   "description": "It is recommended to set a password for the administrative user (root by default) to prevent unauthorized access to the SQL database instances. This recommendation is applicable only for MySQL Instances. PostgreSQL does not offer any setting for No Password from the cloud console.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_2",
-  "title": "6 Cloud SQL Database Services",
+  "title": "6.2 PostgreSQL Database",
   "modifiedChildren": "{cis_v400_6_2_1,cis_v400_6_2_2,cis_v400_6_2_3,cis_v400_6_2_4,cis_v400_6_2_5,cis_v400_6_2_6,cis_v400_6_2_7,cis_v400_6_2_8}",
   "parent": "cis_v400_6",
   "isActive": true,

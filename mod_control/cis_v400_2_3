@@ -1,5 +1,5 @@
 {
-  "index": "93fbc10a-9926-4818-80f3-62e687d53669",
+  "index": "df01232e-565b-4f36-b071-224cbaaea2aa",
   "description": "Enabling retention policies on log buckets will protect logs stored in cloud storage buckets from being overwritten or accidentally deleted. It is recommended to set up retention policies and configure Bucket Lock on all storage buckets that are used as log sinks.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_3",
@@ -8,16 +8,16 @@
   "title": "2.3 Ensure That Retention Policies on Cloud Storage Buckets Used for Exporting Logs Are Configured Using Bucket Lock",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.logging_bucket_retention_policy_enabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    728288000
+    23,
+    55,
+    51,
+    711495000
   ],
   "remediationAvailable": false,
   "anonymous": false,

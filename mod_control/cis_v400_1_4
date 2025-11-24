@@ -1,5 +1,5 @@
 {
-  "index": "81d7e2f8-9668-4b7e-8054-15ea0a49c65c",
+  "index": "0a260c66-7ac2-4fd0-ac71-66e4d45ae9d4",
   "description": "User-managed service accounts should not have user-managed keys.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_1_4",
@@ -8,16 +8,16 @@
   "title": "1.4 Ensure That There Are Only GCP-Managed Service Account Keys for Each Service Account",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.iam_service_account_gcp_managed_key",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    720778000
+    23,
+    55,
+    51,
+    699539000
   ],
   "remediationAvailable": false,
   "anonymous": false,

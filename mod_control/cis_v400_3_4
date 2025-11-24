@@ -1,5 +1,5 @@
 {
-  "index": "471e5663-2783-4a78-bd39-cbd88f061438",
+  "index": "4fd115f0-1bd7-45e7-b739-eea8718fa5f4",
   "description": "DNSSEC algorithm numbers in this registry may be used in CERT RRs. Zone signing (DNSSEC) and transaction security mechanisms (SIG(0) and TSIG) make use of particular subsets of these algorithms. The algorithm used for key signing should be a recommended one and it should be strong.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_4",
@@ -8,16 +8,16 @@
   "title": "3.4 Ensure That RSASHA1 Is Not Used for the Key-Signing Key in Cloud DNS DNSSEC",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.dns_managed_zone_key_signing_not_using_rsasha1",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    726806000
+    23,
+    55,
+    51,
+    709445000
   ],
   "remediationAvailable": false,
   "anonymous": false,

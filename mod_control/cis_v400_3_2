@@ -1,5 +1,5 @@
 {
-  "index": "4a6cc431-9bb8-4a80-a146-4249151f19e7",
+  "index": "ba62e983-140f-4c4b-b616-b9e30b8dd57b",
   "description": "In order to prevent use of legacy networks, a project should not have a legacy network configured. As of now, Legacy Networks are gradually being phased out, and you can no longer create projects with them. This recommendation is to check older projects to ensure that they are not using Legacy Networks.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_2",
@@ -8,16 +8,16 @@
   "title": "3.2 Ensure Legacy Networks Do Not Exist for Older Projects",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_network_contains_no_legacy_network",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    726789000
+    23,
+    55,
+    51,
+    709395000
   ],
   "remediationAvailable": false,
   "anonymous": false,

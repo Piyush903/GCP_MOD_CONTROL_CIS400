@@ -1,5 +1,5 @@
 {
-  "index": "366ec63d-d31f-4641-81e0-98709ab2609a",
+  "index": "1c2eb047-7376-4b5c-af81-c8b11ddeae8e",
   "description": "It is recommended to configure your instance to not use the default Compute Engine service account because it has the Editor role on the project.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_1",
@@ -8,16 +8,16 @@
   "title": "4.1 Ensure That Instances Are Not Configured To Use the Default Service Account",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_instance_with_no_default_service_account",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    725476000
+    23,
+    55,
+    51,
+    708108000
   ],
   "remediationAvailable": false,
   "anonymous": false,

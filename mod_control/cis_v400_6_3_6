@@ -1,5 +1,5 @@
 {
-  "index": "18baf69e-3e7a-4b02-9adf-273eecbf1038",
+  "index": "ac8f106a-0d61-4457-91a4-f15b05365422",
   "description": "It is recommended to set `3625 (trace flag)` database flag for Cloud SQL SQL Server instance to `on`.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_6",
@@ -8,16 +8,16 @@
   "title": "6.3.6 Ensure '3625 (trace flag)' Database Flag for all Cloud SQL SQL Server Instances Is Set to 'on'",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.sql_instance_sql_3625_trace_database_flag_on",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    723860000
+    23,
+    55,
+    51,
+    702648000
   ],
   "remediationAvailable": false,
   "anonymous": false,

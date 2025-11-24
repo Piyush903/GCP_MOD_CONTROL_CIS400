@@ -1,5 +1,5 @@
 {
-  "index": "7c13c279-385c-4d9d-a6b2-925473232beb",
+  "index": "02f022e7-0f28-4ce0-9d12-8df4951144d6",
   "description": "To prevent use of `default` network, a project should not have a `default` network.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_1",
@@ -8,16 +8,16 @@
   "title": "3.1 Ensure That the Default Network Does Not Exist in a Project",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_network_contains_no_default_network",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    726779000
+    23,
+    55,
+    51,
+    709365000
   ],
   "remediationAvailable": false,
   "anonymous": false,

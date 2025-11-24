@@ -1,5 +1,5 @@
 {
-  "index": "e064cc1a-d142-4599-bcc2-7c21d550677e",
+  "index": "2ef16959-20f0-47a6-8b9c-6ac79d33c805",
   "description": "A contained database includes all database settings and metadata required to define the database and has no configuration dependencies on the instance of the Database Engine where the database is installed. Users can connect to the database without authenticating a login at the Database Engine level. Isolating the database from the Database Engine makes it possible to easily move the database to another instance of SQL Server. Contained databases have some unique threats that should be understood and mitigated by SQL Server Database Engine administrators. Most of the threats are related to the USER WITH PASSWORD authentication process, which moves the authentication boundary from the Database Engine level to the database level, hence this is recommended not to enable this flag. This recommendation is applicable to SQL Server database instances.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_7",
@@ -8,16 +8,16 @@
   "title": "6.3.7 Ensure 'contained database authentication' Database Flag for Cloud SQL SQL Server Instance Is Set to 'off'",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.sql_instance_sql_contained_database_authentication_database_flag_off",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    723867000
+    23,
+    55,
+    51,
+    702671000
   ],
   "remediationAvailable": false,
   "anonymous": false,

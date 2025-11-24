@@ -1,5 +1,5 @@
 {
-  "index": "fdd5d1ca-e80c-4e5a-bae5-8f8e817dd9bf",
+  "index": "8b4cf576-e984-4d83-8914-cfe58eaae3f5",
   "description": "Enabling OS login binds SSH certificates to IAM users and facilitates effective SSH certificate management.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_4",
@@ -8,16 +8,16 @@
   "title": "4.4 Ensure Oslogin Is Enabled for a Project",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_instance_oslogin_enabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    725517000
+    23,
+    55,
+    51,
+    708262000
   ],
   "remediationAvailable": false,
   "anonymous": false,

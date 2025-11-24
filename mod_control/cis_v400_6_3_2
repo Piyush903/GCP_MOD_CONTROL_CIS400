@@ -1,5 +1,5 @@
 {
-  "index": "93172a31-2567-4b8e-9f2a-a687baf692e5",
+  "index": "9c643ae6-6b80-4d18-8e70-8f0efc10eedc",
   "description": "It is recommended to set `cross db ownership chaining` database flag for Cloud SQL SQL Server instance to `off`.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_2",
@@ -8,16 +8,16 @@
   "title": "6.3.2 Ensure 'cross db ownership chaining' Database Flag for Cloud SQL SQL Server Instance Is Set to 'off'",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.sql_instance_sql_cross_db_ownership_chaining_database_flag_off",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    723837000
+    23,
+    55,
+    51,
+    702566000
   ],
   "remediationAvailable": false,
   "anonymous": false,

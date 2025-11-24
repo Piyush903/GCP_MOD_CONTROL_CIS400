@@ -1,5 +1,5 @@
 {
-  "index": "128eee0f-ff31-4599-9f85-185591037970",
+  "index": "1b2711a5-a45c-4326-b47f-76f7a24c368c",
   "description": "Google Cloud encrypts data at-rest and in-transit, but customer data must be decrypted for processing. Confidential Computing is a breakthrough technology which encrypts data in-use\u2014while it is being processed. Confidential Computing environments keep data encrypted in memory and elsewhere outside the central processing unit (CPU).",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_11",
@@ -8,16 +8,16 @@
   "title": "4.11 Ensure That Compute Instances Have Confidential Computing Enabled",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_instance_confidential_computing_enabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    725576000
+    23,
+    55,
+    51,
+    708418000
   ],
   "remediationAvailable": false,
   "anonymous": false,

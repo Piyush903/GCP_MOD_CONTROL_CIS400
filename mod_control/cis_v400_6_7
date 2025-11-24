@@ -1,5 +1,5 @@
 {
-  "index": "6b2b7ff7-c51d-41f2-a4f1-7e285da04674",
+  "index": "303cac26-79dc-4035-850f-551660b8de18",
   "description": "It is recommended to have all SQL database instances set to enable automated backups.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_7",
@@ -8,16 +8,16 @@
   "title": "6.7 Ensure That Cloud SQL Database Instances Are Configured With Automated Backups",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.sql_instance_automated_backups_enabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    723895000
+    23,
+    55,
+    51,
+    702781000
   ],
   "remediationAvailable": false,
   "anonymous": false,

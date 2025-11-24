@@ -1,5 +1,5 @@
 {
-  "index": "c207a679-9204-480b-8d8b-4ce7a11257b7",
+  "index": "46250dee-28d8-42c3-8658-d043539caf98",
   "description": "Logging enabled on a HTTPS Load Balancer will show all network traffic and its destination.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_2_16",
@@ -8,16 +8,16 @@
   "title": "2.16 Ensure Logging is enabled for HTTP(S) Load Balancer",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_https_load_balancer_logging_enabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    728523000
+    23,
+    55,
+    51,
+    712173000
   ],
   "remediationAvailable": false,
   "anonymous": false,

@@ -1,5 +1,5 @@
 {
-  "index": "bb04bfbd-1e79-457a-92fd-32993c639314",
+  "index": "f7cdc8e8-040b-4519-8342-051838402622",
   "description": "Secure Sockets Layer (SSL) policies determine what port Transport Layer Security (TLS) features clients are permitted to use when connecting to load balancers.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_3_9",
@@ -8,16 +8,16 @@
   "title": "3.9 Ensure No HTTPS or SSL Proxy Load Balancers Permit SSL Policies With Weak Cipher Suites",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_ssl_policy_with_no_weak_cipher",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    726853000
+    23,
+    55,
+    51,
+    709631000
   ],
   "remediationAvailable": false,
   "anonymous": false,

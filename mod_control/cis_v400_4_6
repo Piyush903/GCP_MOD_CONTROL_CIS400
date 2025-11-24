@@ -1,5 +1,5 @@
 {
-  "index": "564b5e41-c73d-4714-a047-34a9af39495f",
+  "index": "7b548342-fd1c-42bb-81bc-b79fe2b0d1e0",
   "description": "Compute Engine instance cannot forward a packet unless the source IP address of the packet matches the IP address of the instance. Similarly, GCP won't deliver a packet whose destination IP address is different than the IP address of the instance receiving the packet. However, both capabilities are required if you want to use instances to help route packets.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_4_6",
@@ -8,16 +8,16 @@
   "title": "4.6 Ensure That IP Forwarding Is Not Enabled on Instances",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.compute_instance_ip_forwarding_disabled",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    725533000
+    23,
+    55,
+    51,
+    708298000
   ],
   "remediationAvailable": false,
   "anonymous": false,

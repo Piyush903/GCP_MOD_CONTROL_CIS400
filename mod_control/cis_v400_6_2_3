@@ -1,5 +1,5 @@
 {
-  "index": "01ba8926-cfa3-4f85-8ec5-253037cb0bdd",
+  "index": "17e89f10-4d6d-4a1d-a35b-3718af35efed",
   "description": "Enabling the `log_disconnections` setting logs the end of each session, including the session duration.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_2_3",
@@ -8,16 +8,16 @@
   "title": "6.2.3 Ensure That the 'Log_disconnections' Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'On'",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.sql_instance_postgresql_log_disconnections_database_flag_on",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    723795000
+    23,
+    55,
+    51,
+    702410000
   ],
   "remediationAvailable": false,
   "anonymous": false,

@@ -1,5 +1,5 @@
 {
-  "index": "a1bb00d5-7c95-4350-bf10-abe4bc149757",
+  "index": "cca9bcf4-4084-47af-b5cf-798f6e95961c",
   "description": "It is recommended to set `remote access` database flag for Cloud SQL SQL Server instance to `off`.",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_5",
@@ -8,16 +8,16 @@
   "title": "6.3.5 Ensure 'remote access' Database Flag for Cloud SQL SQL Server Instance Is Set to 'off'",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.sql_instance_sql_remote_access_database_flag_off",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    723855000
+    23,
+    55,
+    51,
+    702628000
   ],
   "remediationAvailable": false,
   "anonymous": false,

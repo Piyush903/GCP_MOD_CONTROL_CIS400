@@ -1,5 +1,5 @@
 {
-  "index": "3c74ad9f-45da-462f-9a55-89f2b4665cf5",
+  "index": "3b36acfb-7d70-4099-b3b0-83ee409b74ce",
   "description": "The `user options` option specifies global defaults for all users. A list of default query processing options is established for the duration of a user's work session. The user options option allows you to change the default values of the SET options (if the server's default settings are not appropriate).",
   "modName": "gcp_compliance",
   "resourceName": "cis_v400_6_3_4",
@@ -8,16 +8,16 @@
   "title": "6.3.4 Ensure 'user options' Database Flag for Cloud SQL SQL Server Instance Is Not Configured",
   "path": null,
   "qualifiedName": null,
-  "query": "gcp_compliance.query.manual_control",
+  "query": "gcp_compliance.query.sql_instance_sql_user_options_database_flag_not_configured",
   "controlLevel": "master",
   "createdAt": [
     2025,
     11,
     23,
-    10,
-    15,
-    29,
-    723849000
+    23,
+    55,
+    51,
+    702607000
   ],
   "remediationAvailable": false,
   "anonymous": false,
