@@ -1,0 +1,25 @@
+{
+  "index": "4a47af51-8b6c-47e8-b0d4-81b85f2ad3d6",
+  "description": "API Keys should only be used for services in cases where other authentication methods are unavailable. Unused keys with their permissions in tact may still exist within a project. Keys are insecure because they can be viewed publicly, such as from within a browser, or they can be accessed on a device where the key resides. It is recommended to use standard authentication flow instead.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_12",
+  "severity": "medium",
+  "sql": "with project_api_key as (   select     project,     count(*) as api_key_count   from     gcp.gcp_apikeys_key where  project_id=projectId and cd_snapshot_version=snapshotVersion group by project), gcp.gcp_projects as (   select     self_link,     name,     project_id   from     gcp.gcp_project where  project_id=projectId and cd_snapshot_version=snapshotVersion ) select   p.self_link as resource,   case     when k.api_key_count > 0  then 'alarm'     else 'ok'   end as status,   case     when k.api_key_count > 0 then p.name || ' has ' ||  k.api_key_count || ' api key(s).'     else p.name || ' has no api key(s).'   end as reason   , project_id as project from   gcp.gcp_projects as p left join project_api_key as k on k.project = p.project_id where  project_id=projectId and cd_snapshot_version=snapshotVersion ;",
+  "title": "1.12 Ensure API Keys Only Exist for Active Services",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.project_no_api_key",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    23,
+    23,
+    55,
+    51,
+    699960000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}

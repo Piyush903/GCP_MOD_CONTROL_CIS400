@@ -1,0 +1,25 @@
+{
+  "index": "f4dcb556-e0af-4c00-90c6-57d710a0976d",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_1_14",
+  "severity": "medium",
+  "sql": "select    'https://iam.googleapis.com/v1/projects/' || project || '/apikeys/' || name as resource,   case     when restrictions -> 'apiTargets' is null then 'alarm'     else 'ok'   end as status,   case     when restrictions -> 'apiTargets' is null then title || ' API key is not restricted to required APIs.'     else title || ' API key is restricted to only required APIs.'   end as reason   , location as location, project as project from   gcp.gcp_apikeys_key where project_id=projectId\nand cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure API keys are restricted to only APIs that application needs access",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_api_key_restricts_apis",
+  "controlLevel": "cis_v400_1_14",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    489436000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}

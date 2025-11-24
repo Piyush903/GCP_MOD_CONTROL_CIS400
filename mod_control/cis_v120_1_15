@@ -1,0 +1,25 @@
+{
+  "index": "19d7f636-a9f5-4953-94df-fc6ceeb4c418",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_1_15",
+  "severity": "medium",
+  "sql": "select   'https://iam.googleapis.com/v1/projects/' || project || '/apikeys/' || name as resource,   case     when create_time <= (current_date - interval '90' day) then 'alarm'     else 'ok'   end as status,   display_name || ' ' || uid || ' created ' || to_char(create_time , 'DD-Mon-YYYY') ||     ' (' || extract(day from current_timestamp - create_time) || ' days).'   as reason   , project as project from   gcp.gcp_apikeys_key where project_id=projectId and cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure API keys are rotated every 90 days",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_api_key_age_90",
+  "controlLevel": "cis_v400_1_15",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    935188000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}

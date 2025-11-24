@@ -1,0 +1,25 @@
+{
+  "index": "91985c11-df50-438e-8f9f-105951e607b5",
+  "description": "The `log_error_verbosity` flag controls the verbosity/details of messages logged. Valid values are: 'TERSE', 'DEFAULT', and 'VERBOSE'.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_6_2_1",
+  "severity": "medium",
+  "sql": "select   self_link as resource,   case     when database_version not like 'POSTGRES%' then 'skip'     when database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"default\"}]' or database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"verbose\"}]' then 'ok'     else 'alarm'   end as status,   case     when database_version not like 'POSTGRES%' then title || ' not a PostgreSQL database.'     when database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"default\"}]' then title || ' log_error_verbosity database flag set to DEFAULT.'     when database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"verbose\"}]' then title || ' log_error_verbosity database flag set to VERBOSE.'     when database_flags @> '[{\"name\": \"log_error_verbosity\",\"value\":\"terse\"}]' then title || ' log_error_verbosity database flag set to TERSE.'     else title || ' log_error_verbosity database flag not set.'   end as reason      , location as location, project as project from   gcp.gcp_sql_database_instance where project_id=projectId and cd_snapshot_version=snapshotVersion;",
+  "title": "6.2.1 Ensure 'Log_error_verbosity' Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'DEFAULT' or Stricter",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.sql_instance_postgresql_log_error_verbosity_database_flag_default_or_stricter",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    23,
+    23,
+    55,
+    51,
+    702360000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}

@@ -1,0 +1,25 @@
+{
+  "index": "826bae0f-3a4b-437a-85e2-afa72231cda6",
+  "description": "API Keys should only be used for services in cases where other authentication methods are unavailable. In this case, unrestricted keys are insecure because they can be viewed publicly, such as from within a browser, or they can be accessed on a device where the key resides. It is recommended to restrict API key usage to trusted hosts, HTTP referrers and apps. It is recommended to use the more secure standard authentication flow instead.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v400_1_13",
+  "severity": "medium",
+  "sql": "select   'https://iam.googleapis.com/v1/projects/' || project || '/apikeys/' || name as resource,   case     when restrictions -> 'serverKeyRestrictions' is null       and restrictions -> 'browserKeyRestrictions' is null       and restrictions -> 'androidKeyRestrictions' is null       and restrictions -> 'iosKeyRestrictions' is null then 'alarm'     when restrictions -> 'serverKeyRestrictions' @> any( array[     '{\"allowedIps\": [\"0.0.0.0\"]}', '{\"allowedIps\": [\"0.0.0.0/0\"]}', '{\"allowedIps\": [\"::0\"]}']::jsonb[]) then 'alarm'     when restrictions -> 'browserKeyRestrictions' @> any( array[     '{\"allowedReferrers\": [\"*\"]}','{\"allowedReferrers\": [\"*.[TLD]/*\"]}','{\"allowedReferrers\": [\"*.[TLD]\"]}' ]::jsonb[] ) then 'alarm'     else 'ok'   end as status,   case     when restrictions -> 'serverKeyRestrictions' is null       and restrictions -> 'browserKeyRestrictions' is null       and restrictions -> 'androidKeyRestrictions' is null       and restrictions -> 'iosKeyRestrictions' is null       then title || ' API key not restricted to use any specified Websites, Hosts and Apps.'     when restrictions -> 'serverKeyRestrictions' @> any( array[     '{\"allowedIps\": [\"0.0.0.0\"]}', '{\"allowedIps\": [\"0.0.0.0/0\"]}', '{\"allowedIps\": [\"::0\"]}']::jsonb[]) then title || ' API key open to any hosts.'     when restrictions -> 'browserKeyRestrictions' @> any( array[     '{\"allowedReferrers\": [\"*\"]}','{\"allowedReferrers\": [\"*.[TLD]/*\"]}','{\"allowedReferrers\": [\"*.[TLD]\"]}' ]::jsonb[] ) then  title || ' API key open to any or wide range of HTTP referrer(s).'     else title || ' API key is restricted with specific Website(s), Host(s) and App(s).'   end as reason   , location as location, project as project from   gcp.gcp_apikeys_key where  project_id=projectId and cd_snapshot_version=snapshotVersion;",
+  "title": "1.13 Ensure API Keys Are Restricted To Use by Only Specified Hosts and Apps",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_api_key_restricts_websites_hosts_apps",
+  "controlLevel": "master",
+  "createdAt": [
+    2025,
+    11,
+    23,
+    23,
+    55,
+    51,
+    699981000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}

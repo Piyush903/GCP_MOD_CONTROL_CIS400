@@ -1,0 +1,25 @@
+{
+  "index": "cdecf855-c498-4b55-af6c-2a7505f0a441",
+  "description": "Run individual configuration, compliance and security controls or full compliance benchmarks for CIS, Forseti Security and CFT Scorecard across all your GCP projects.",
+  "modName": "gcp_compliance",
+  "resourceName": "cis_v120_1_13",
+  "severity": "medium",
+  "sql": "select   'https://iam.googleapis.com/v1/projects/' || project || '/apikeys/' || name as resource,   case     when restrictions -> 'serverKeyRestrictions' is null       and restrictions -> 'browserKeyRestrictions' is null       and restrictions -> 'androidKeyRestrictions' is null       and restrictions -> 'iosKeyRestrictions' is null then 'alarm'     when restrictions -> 'serverKeyRestrictions' @> any( array[     '{\"allowedIps\": [\"0.0.0.0\"]}', '{\"allowedIps\": [\"0.0.0.0/0\"]}', '{\"allowedIps\": [\"::0\"]}']::jsonb[]) then 'alarm'     when restrictions -> 'browserKeyRestrictions' @> any( array[     '{\"allowedReferrers\": [\"*\"]}','{\"allowedReferrers\": [\"*.[TLD]/*\"]}','{\"allowedReferrers\": [\"*.[TLD]\"]}' ]::jsonb[] ) then 'alarm'     else 'ok'   end as status,   case     when restrictions -> 'serverKeyRestrictions' is null       and restrictions -> 'browserKeyRestrictions' is null       and restrictions -> 'androidKeyRestrictions' is null       and restrictions -> 'iosKeyRestrictions' is null       then title || ' API key not restricted to use any specified Websites, Hosts and Apps.'     when restrictions -> 'serverKeyRestrictions' @> any( array[     '{\"allowedIps\": [\"0.0.0.0\"]}', '{\"allowedIps\": [\"0.0.0.0/0\"]}', '{\"allowedIps\": [\"::0\"]}']::jsonb[]) then title || ' API key open to any hosts.'     when restrictions -> 'browserKeyRestrictions' @> any( array[     '{\"allowedReferrers\": [\"*\"]}','{\"allowedReferrers\": [\"*.[TLD]/*\"]}','{\"allowedReferrers\": [\"*.[TLD]\"]}' ]::jsonb[] ) then  title || ' API key open to any or wide range of HTTP referrer(s).'     else title || ' API key is restricted with specific Website(s), Host(s) and App(s).'   end as reason   , location as location, project as project from   gcp.gcp_apikeys_key where  project_id=projectId and cd_snapshot_version=snapshotVersion;",
+  "title": "Ensure API keys are restricted to use by only specified Hosts and Apps",
+  "path": null,
+  "qualifiedName": null,
+  "query": "gcp_compliance.query.iam_api_key_restricts_websites_hosts_apps",
+  "controlLevel": "cis_v400_1_13",
+  "createdAt": [
+    2023,
+    7,
+    5,
+    12,
+    0,
+    35,
+    802427000
+  ],
+  "remediationAvailable": false,
+  "anonymous": false,
+  "type": "Project"
+}
