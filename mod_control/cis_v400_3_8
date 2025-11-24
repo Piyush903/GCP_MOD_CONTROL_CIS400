@@ -21,7 +21,5 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type": "Project",
-  "isMaster": true,
-  "__path": "/home/piyushnijhawan/Desktop/steampipe-mod-gcp-compliance/cis_v400/mod_control/cis_v400_3_8"
+  "type": "Project"
 }

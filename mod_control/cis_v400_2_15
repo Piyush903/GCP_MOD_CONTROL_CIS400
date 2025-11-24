@@ -21,6 +21,5 @@
   ],
   "remediationAvailable": false,
   "anonymous": false,
-  "type": "Project",
-  "isMaster": true
+  "type": "Project"
 }
